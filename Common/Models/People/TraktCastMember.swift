@@ -1,9 +1,9 @@
 //
-//  TraktCastMember.swift
-//  TraktKit
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 4/13/16.
-//  Copyright © 2016 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
 import Foundation
@@ -16,7 +16,7 @@ public struct TVCastMember: Codable, Hashable {
     /// Not available for /episodes/{number}/people
     public let episodeCount: Int?
     public let person: Person
-    
+
     enum CodingKeys: String, CodingKey {
         case characters
         case character
@@ -31,7 +31,7 @@ public struct MovieCastMember: Codable, Hashable {
     @available(*, deprecated, renamed: "characters")
     public let character: String
     public let person: Person
-    
+
     enum CodingKeys: String, CodingKey {
         case characters
         case character
@@ -47,7 +47,7 @@ public struct PeopleTVCastMember: Codable, Hashable {
     public let episodeCount: Int
     public let seriesRegular: Bool
     public let show: TraktShow
-    
+
     enum CodingKeys: String, CodingKey {
         case characters
         case character
@@ -63,7 +63,7 @@ public struct PeopleMovieCastMember: Codable, Hashable {
     @available(*, deprecated, renamed: "characters")
     public let character: String
     public let movie: TraktMovie
-    
+
     enum CodingKeys: String, CodingKey {
         case characters
         case character

@@ -1,9 +1,9 @@
 //
-//  AddToHistoryResult.swift
-//  TraktKit
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 12/7/20.
-//  Copyright © 2020 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
 import Foundation
@@ -15,7 +15,7 @@ public struct NotFoundIds: Codable, Hashable {
     public let imdb: String?
     public let tmdb: Int?
     public let tvRage: Int?
-    
+
     enum IDsCodingKeys: String, CodingKey {
         case trakt
         case slug
@@ -24,11 +24,11 @@ public struct NotFoundIds: Codable, Hashable {
         case tmdb
         case tvRage = "tvrage"
     }
-    
+
     enum CodingKeys: String, CodingKey {
         case ids
     }
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let idsContainer = try container.nestedContainer(keyedBy: IDsCodingKeys.self, forKey: .ids)
@@ -39,7 +39,7 @@ public struct NotFoundIds: Codable, Hashable {
         self.tmdb = try idsContainer.decodeIfPresent(Int.self, forKey: .tmdb)
         self.tvRage = try idsContainer.decodeIfPresent(Int.self, forKey: .tvRage)
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         var idsContainer = container.nestedContainer(keyedBy: IDsCodingKeys.self, forKey: .ids)
@@ -55,19 +55,19 @@ public struct NotFoundIds: Codable, Hashable {
 public struct AddToHistoryResult: Codable, Hashable {
     public let added: Added
     public let notFound: NotFound
-    
+
     public struct Added: Codable, Hashable {
         public let movies: Int
         public let episodes: Int
     }
-    
+
     public struct NotFound: Codable, Hashable {
         public let movies: [NotFoundIds]
         public let shows: [NotFoundIds]
         public let seasons: [NotFoundIds]
         public let episodes: [NotFoundIds]
     }
-    
+
     enum CodingKeys: String, CodingKey {
         case added
         case notFound = "not_found"
@@ -77,12 +77,12 @@ public struct AddToHistoryResult: Codable, Hashable {
 public struct RemoveFromHistoryResult: Codable, Hashable {
     public let deleted: Deleted
     public let notFound: NotFound
-    
+
     public struct Deleted: Codable, Hashable {
         public let movies: Int
         public let episodes: Int
     }
-    
+
     public struct NotFound: Codable, Hashable {
         public let movies: [NotFoundIds]
         public let shows: [NotFoundIds]
@@ -91,7 +91,7 @@ public struct RemoveFromHistoryResult: Codable, Hashable {
         /// Array of history ids.
         public let ids: [Int]?
     }
-    
+
     enum CodingKeys: String, CodingKey {
         case deleted
         case notFound = "not_found"

@@ -1,14 +1,14 @@
 //
-//  EpisodeTests.swift
-//  TraktKitTests
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 6/13/17.
-//  Copyright © 2017 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
-import XCTest
 import Foundation
 @testable import TraktKit
+import XCTest
 
 class EpisodeTests: XCTestCase {
 
@@ -29,7 +29,7 @@ class EpisodeTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "EpisodeSummary")
         traktManager.getEpisodeSummary(showID: "game-of-thrones", seasonNumber: 1, episodeNumber: 1) { result in
-            if case .success(let episode) = result {
+            if case let .success(episode) = result {
                 XCTAssertEqual(episode.title, "Winter Is Coming")
                 XCTAssertEqual(episode.season, 1)
                 XCTAssertEqual(episode.number, 1)
@@ -55,7 +55,7 @@ class EpisodeTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "EpisodeSummary")
         traktManager.getEpisodeSummary(showID: "game-of-thrones", seasonNumber: 1, episodeNumber: 1, extended: [.Full]) { result in
-            if case .success(let episode) = result {
+            if case let .success(episode) = result {
                 XCTAssertEqual(episode.title, "Winter Is Coming")
                 XCTAssertEqual(episode.season, 1)
                 XCTAssertEqual(episode.number, 1)
@@ -79,17 +79,17 @@ class EpisodeTests: XCTestCase {
             break
         }
     }
-    
+
     func test_get_full_episode_async() async throws {
         session.nextData = jsonData(named: "Episode_Full")
-        
+
         let episode = try await traktManager
             .show(id: "game-of-thrones")
             .season(1).episode(1)
             .summary()
             .extend(.Full)
             .perform()
-        
+
         XCTAssertEqual(episode.title, "Winter Is Coming")
         XCTAssertEqual(episode.season, 1)
         XCTAssertEqual(episode.number, 1)
@@ -98,7 +98,7 @@ class EpisodeTests: XCTestCase {
         XCTAssertNotNil(episode.firstAired)
         XCTAssertNotNil(episode.updatedAt)
         XCTAssertEqual(episode.availableTranslations!, ["en"])
-        
+
         XCTAssertEqual(session.lastURL?.absoluteString, "https://api.trakt.tv/shows/game-of-thrones/seasons/1/episodes/1?extended=full")
     }
 
@@ -109,7 +109,7 @@ class EpisodeTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get episode translations")
         traktManager.getEpisodeTranslations(showID: "game-of-thrones", seasonNumber: 1, episodeNumber: 1) { result in
-            if case .success(let translations) = result {
+            if case let .success(translations) = result {
                 XCTAssertEqual(translations.count, 3)
             } else {
                 XCTFail("Invalid result")
@@ -134,7 +134,7 @@ class EpisodeTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get episode comments")
         traktManager.getEpisodeComments(showID: "game-of-thrones", seasonNumber: 1, episodeNumber: 1) { result in
-            if case .success(let comments, _, _) = result {
+            if case let .success(comments, _, _) = result {
                 XCTAssertEqual(comments.count, 1)
             } else {
                 XCTFail("Invalid result")
@@ -158,14 +158,23 @@ class EpisodeTests: XCTestCase {
         session.nextData = jsonData(named: "test_get_lists_containing_episode")
 
         let expectation = XCTestExpectation(description: "Get lists containing episode")
-        traktManager.getListsContainingEpisode(showID: "game-of-thrones", seasonNumber: 1, episodeNumber: 1, listType: .official, sortBy: .added) { result in
-            if case .success(let lists, _, _) = result {
+        traktManager.getListsContainingEpisode(
+            showID: "game-of-thrones",
+            seasonNumber: 1,
+            episodeNumber: 1,
+            listType: .official,
+            sortBy: .added
+        ) { result in
+            if case let .success(lists, _, _) = result {
                 XCTAssertEqual(lists.count, 1)
                 expectation.fulfill()
             }
         }
         let result = XCTWaiter().wait(for: [expectation], timeout: 5)
-        XCTAssertEqual(session.lastURL?.absoluteString, "https://api.trakt.tv/shows/game-of-thrones/seasons/1/episodes/1/lists/official/added")
+        XCTAssertEqual(
+            session.lastURL?.absoluteString,
+            "https://api.trakt.tv/shows/game-of-thrones/seasons/1/episodes/1/lists/official/added"
+        )
 
         switch result {
         case .timedOut:
@@ -182,7 +191,7 @@ class EpisodeTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get episode ratings")
         traktManager.getEpisodeRatings(showID: "game-of-thrones", seasonNumber: 1, episodeNumber: 1) { result in
-            if case .success(let rating) = result {
+            if case let .success(rating) = result {
                 XCTAssertEqual(rating.rating, 9)
                 XCTAssertEqual(rating.votes, 3)
             } else {
@@ -208,7 +217,7 @@ class EpisodeTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get episode stats")
         traktManager.getEpisodeStatistics(showID: "game-of-thrones", seasonNumber: 1, episodeNumber: 1) { result in
-            if case .success(let stats) = result {
+            if case let .success(stats) = result {
                 XCTAssertEqual(stats.watchers, 30521)
                 XCTAssertEqual(stats.plays, 37986)
                 XCTAssertEqual(stats.collectors, 12899)
@@ -239,7 +248,7 @@ class EpisodeTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get users watching episode")
         traktManager.getUsersWatchingEpisode(showID: "game-of-thrones", seasonNumber: 1, episodeNumber: 1) { result in
-            if case .success(let watchers) = result {
+            if case let .success(watchers) = result {
                 XCTAssertEqual(watchers.count, 2)
             } else {
                 XCTFail("Invalid result")
@@ -256,20 +265,20 @@ class EpisodeTests: XCTestCase {
             break
         }
     }
-    
+
     // MARK: - People
-    
+
     func test_get_show_people_min() {
         session.nextData = jsonData(named: "test_get_episode_cast")
-        
+
         let expectation = XCTestExpectation(description: "ShowCastAndCrew")
         traktManager.getPeopleInEpisode(showID: "game-of-thrones", season: 1, episode: 1) { result in
-            if case .success(let castAndCrew) = result {
+            if case let .success(castAndCrew) = result {
                 XCTAssertNotNil(castAndCrew.cast)
                 XCTAssertNotNil(castAndCrew.writers)
                 XCTAssertEqual(castAndCrew.cast!.count, 20)
                 XCTAssertEqual(castAndCrew.writers!.count, 2)
-                
+
                 guard let actor = castAndCrew.cast?.first else { return XCTFail("Cast is empty") }
                 XCTAssertEqual(actor.person.name, "Emilia Clarke")
                 XCTAssertEqual(actor.characters, ["Daenerys Targaryen"])
@@ -279,8 +288,11 @@ class EpisodeTests: XCTestCase {
             expectation.fulfill()
         }
         let result = XCTWaiter().wait(for: [expectation], timeout: 5)
-        XCTAssertEqual(session.lastURL?.absoluteString, "https://api.trakt.tv/shows/game-of-thrones/seasons/1/episodes/1/people?extended=min")
-        
+        XCTAssertEqual(
+            session.lastURL?.absoluteString,
+            "https://api.trakt.tv/shows/game-of-thrones/seasons/1/episodes/1/people?extended=min"
+        )
+
         switch result {
         case .timedOut:
             XCTFail("Something isn't working")

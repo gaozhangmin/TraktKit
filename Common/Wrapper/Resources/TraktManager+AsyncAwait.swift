@@ -1,15 +1,15 @@
 //
-//  TraktManager+AsyncAwait.swift
-//  TraktKit
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maxamilian Litteral on 6/14/21.
-//  Copyright © 2021 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
 import Foundation
 
 extension TraktManager {
-    func `get`<T: Codable>(_ path: String, authorized: Bool = false, resultType: T.Type = T.self) async throws -> Route<T> {
+    func get<T: Codable>(_ path: String, authorized: Bool = false, resultType: T.Type = T.self) async throws -> Route<T> {
         Route(path: path, method: .GET, requiresAuthentication: authorized, traktManager: self)
     }
 }

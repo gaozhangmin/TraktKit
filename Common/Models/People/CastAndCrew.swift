@@ -1,14 +1,14 @@
 //
-//  CastAndCrew.swift
-//  TraktKit
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 6/15/17.
-//  Copyright © 2017 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
 import Foundation
 
-public struct CastAndCrew<Cast: Codable & Hashable, Crew: Codable & Hashable>: Hashable {    
+public struct CastAndCrew<Cast: Codable & Hashable, Crew: Codable & Hashable>: Hashable {
     public let cast: [Cast]?
     public let guestStars: [Cast]?
     public let directors: [Crew]?
@@ -23,13 +23,13 @@ public struct CastAndCrew<Cast: Codable & Hashable, Crew: Codable & Hashable>: H
     public let camera: [Crew]?
     public let crew: [Crew]?
     public let lighting: [Crew]?
-    
+
     enum CodingKeys: String, CodingKey {
         case cast
         case guestStars = "guest_stars"
         case crew
     }
-    
+
     enum CrewKeys: String, CodingKey {
         case directors = "directing"
         case writers = "writing"
@@ -50,7 +50,7 @@ extension CastAndCrew: Decodable {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         cast = try values.decodeIfPresent([Cast].self, forKey: .cast)
         guestStars = try values.decodeIfPresent([Cast].self, forKey: .guestStars)
-        
+
         let crewContainer = try? values.nestedContainer(keyedBy: CrewKeys.self, forKey: .crew)
         directors = try crewContainer?.decodeIfPresent([Crew].self, forKey: .directors)
         writers = try crewContainer?.decodeIfPresent([Crew].self, forKey: .writers)
@@ -70,7 +70,7 @@ extension CastAndCrew: Encodable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(cast, forKey: .cast)
-        
+
         var additionalInfo = container.nestedContainer(keyedBy: CrewKeys.self, forKey: .crew)
         try additionalInfo.encodeIfPresent(directors, forKey: .directors)
         try additionalInfo.encodeIfPresent(writers, forKey: .writers)

@@ -1,14 +1,14 @@
 //
-//  CertificationsTests.swift
-//  TraktKitTests
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 8/10/17.
-//  Copyright © 2017 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
-import XCTest
 import Foundation
 @testable import TraktKit
+import XCTest
 
 class CertificationsTests: XCTestCase {
 
@@ -27,7 +27,7 @@ class CertificationsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get Certifications")
         traktManager.getCertifications { result in
-            if case .success(let certifications) = result {
+            if case let .success(certifications) = result {
                 XCTAssertEqual(certifications.us.count, 5)
                 expectation.fulfill()
             }

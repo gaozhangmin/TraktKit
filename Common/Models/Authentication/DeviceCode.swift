@@ -1,8 +1,9 @@
 //
-//  DeviceCode.swift
-//  TraktKit
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Copyright © 2020 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
 #if canImport(UIKit)
@@ -15,7 +16,7 @@ public struct DeviceCode: Codable {
     public let verificationURL: String
     public let expiresIn: Int
     public let interval: Int
-    
+
     #if canImport(UIKit)
     #if canImport(CoreImage)
     public func getQRCode() -> UIImage? {
@@ -34,7 +35,7 @@ public struct DeviceCode: Codable {
     }
     #endif
     #endif
-    
+
     enum CodingKeys: String, CodingKey {
         case deviceCode = "device_code"
         case userCode = "user_code"

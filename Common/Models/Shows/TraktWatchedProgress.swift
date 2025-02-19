@@ -1,16 +1,16 @@
 //
-//  TraktWatchedProgress.swift
-//  TraktKit
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 7/31/16.
-//  Copyright © 2016 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
 import Foundation
 
 /// Watched progress. Shows/Progress/Watched
 public struct TraktShowWatchedProgress: Codable, Hashable {
-    
+
     // Extended: Min
     /// Number of episodes that have aired
     public let aired: Int
@@ -20,7 +20,7 @@ public struct TraktShowWatchedProgress: Codable, Hashable {
     public let lastWatchedAt: Date?
     public let seasons: [TraktSeasonWatchedProgress]
     public let nextEpisode: TraktEpisode?
-    
+
     enum CodingKeys: String, CodingKey {
         case aired
         case completed
@@ -31,7 +31,7 @@ public struct TraktShowWatchedProgress: Codable, Hashable {
 }
 
 public struct TraktSeasonWatchedProgress: Codable, Hashable {
-    
+
     // Extended: Min
     /// Season number
     public let number: Int
@@ -43,7 +43,7 @@ public struct TraktSeasonWatchedProgress: Codable, Hashable {
 }
 
 public struct TraktEpisodeWatchedProgress: Codable, Hashable {
-    
+
     // Extended: Min
     /// Season number
     public let number: Int
@@ -51,7 +51,7 @@ public struct TraktEpisodeWatchedProgress: Codable, Hashable {
     public let completed: Bool
     /// When the last episode was watched
     public let lastWatchedAt: Date?
-    
+
     enum CodingKeys: String, CodingKey {
         case number
         case completed

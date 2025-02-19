@@ -1,14 +1,14 @@
 //
-//  SyncTests.swift
-//  TraktKitTests
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 6/15/17.
-//  Copyright © 2017 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
-import XCTest
 import Foundation
 @testable import TraktKit
+import XCTest
 
 class SyncTests: XCTestCase {
 
@@ -29,7 +29,7 @@ class SyncTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get Last Activity")
         traktManager.lastActivities { result in
-            if case .success(_) = result {
+            if case .success = result {
                 expectation.fulfill()
             }
         }
@@ -51,7 +51,7 @@ class SyncTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get Playback progress")
         traktManager.getPlaybackProgress(type: .Movies) { result in
-            if case .success(let progress) = result {
+            if case let .success(progress) = result {
                 XCTAssertEqual(progress.count, 2)
                 let first = progress.first
                 XCTAssertEqual(first?.progress, 10)
@@ -100,7 +100,7 @@ class SyncTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get collection")
         traktManager.getCollection(type: .Movies) { result in
-            if case .success(let collection) = result {
+            if case let .success(collection) = result {
                 XCTAssertEqual(collection.count, 2)
                 expectation.fulfill()
             }
@@ -115,24 +115,24 @@ class SyncTests: XCTestCase {
             break
         }
     }
-    
+
     func test_get_collection_shows() {
         session.nextData = jsonData(named: "test_get_collection_shows")
-        
+
         let expectation = XCTestExpectation(description: "Get shows collection")
         traktManager.getCollection(type: .Shows) { result in
-            if case .success(let collection) = result {
+            if case let .success(collection) = result {
                 XCTAssertEqual(collection.count, 2)
-                collection.forEach {
-                    XCTAssertNotNil($0.lastCollectedAt)
-                    XCTAssertNotNil($0.lastUpdatedAt)
+                for item in collection {
+                    XCTAssertNotNil(item.lastCollectedAt)
+                    XCTAssertNotNil(item.lastUpdatedAt)
                 }
                 expectation.fulfill()
             }
         }
         let result = XCTWaiter().wait(for: [expectation], timeout: 1)
         XCTAssertEqual(session.lastURL?.absoluteString, "https://api.trakt.tv/sync/collection/shows?extended=min")
-        
+
         switch result {
         case .timedOut:
             XCTFail("Something isn't working")
@@ -149,7 +149,7 @@ class SyncTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Add items to collection")
         try! traktManager.addToCollection(movies: [], shows: [], episodes: []) { result in
-            if case .success(let result) = result {
+            if case let .success(result) = result {
                 XCTAssertEqual(result.added.movies, 1)
                 XCTAssertEqual(result.added.episodes, 12)
                 expectation.fulfill()
@@ -173,7 +173,7 @@ class SyncTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Remove items from collection")
         try! traktManager.removeFromCollection(movies: [], shows: [], episodes: []) { result in
-            if case .success(let result) = result {
+            if case let .success(result) = result {
                 XCTAssertEqual(result.deleted.movies, 1)
                 XCTAssertEqual(result.deleted.episodes, 12)
                 XCTAssertEqual(result.notFound.episodes.count, 0)
@@ -199,7 +199,7 @@ class SyncTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get Watched")
         traktManager.getWatchedMovies { result in
-            if case .success(let watchedMovies, _, _) = result {
+            if case let .success(watchedMovies, _, _) = result {
                 XCTAssertEqual(watchedMovies.count, 2)
                 expectation.fulfill()
             }
@@ -214,24 +214,24 @@ class SyncTests: XCTestCase {
             break
         }
     }
-    
+
     func test_get_watched_shows_noseasons() {
         session.nextData = jsonData(named: "test_get_watched_shows_noseasons")
-        
+
         let expectation = XCTestExpectation(description: "Get Watched - noSeasons")
         traktManager.getWatchedShows(extended: [.noSeasons]) { result in
-            if case .success(let watchedShows) = result {
+            if case let .success(watchedShows) = result {
                 XCTAssertEqual(watchedShows.count, 2)
-                watchedShows.forEach {
-                    XCTAssertNotNil($0.lastWatchedAt)
-                    XCTAssertNotNil($0.lastUpdatedAt)
+                for watchedShow in watchedShows {
+                    XCTAssertNotNil(watchedShow.lastWatchedAt)
+                    XCTAssertNotNil(watchedShow.lastUpdatedAt)
                 }
                 expectation.fulfill()
             }
         }
         let result = XCTWaiter().wait(for: [expectation], timeout: 1)
         XCTAssertEqual(session.lastURL?.absoluteString, "https://api.trakt.tv/sync/watched/shows?extended=noseasons")
-        
+
         switch result {
         case .timedOut:
             XCTFail("Something isn't working")
@@ -239,24 +239,24 @@ class SyncTests: XCTestCase {
             break
         }
     }
-    
+
     func test_get_watched_shows() {
         session.nextData = jsonData(named: "test_get_watched_shows")
-        
+
         let expectation = XCTestExpectation(description: "Get Watched")
         traktManager.getWatchedShows { result in
-            if case .success(let watchedShows) = result {
+            if case let .success(watchedShows) = result {
                 XCTAssertEqual(watchedShows.count, 2)
-                watchedShows.forEach {
-                    XCTAssertNotNil($0.lastWatchedAt)
-                    XCTAssertNotNil($0.lastUpdatedAt)
+                for watchedShow in watchedShows {
+                    XCTAssertNotNil(watchedShow.lastWatchedAt)
+                    XCTAssertNotNil(watchedShow.lastUpdatedAt)
                 }
                 expectation.fulfill()
             }
         }
         let result = XCTWaiter().wait(for: [expectation], timeout: 1)
         XCTAssertEqual(session.lastURL?.absoluteString, "https://api.trakt.tv/sync/watched/shows?extended=min")
-        
+
         switch result {
         case .timedOut:
             XCTFail("Something isn't working")
@@ -272,7 +272,7 @@ class SyncTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get Watched history")
         traktManager.getHistory(type: .Movies) { result in
-            if case .success(let history, _, _) = result {
+            if case let .success(history, _, _) = result {
                 XCTAssertEqual(history.count, 3)
                 expectation.fulfill()
             }
@@ -297,7 +297,7 @@ class SyncTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Add items to history")
         try! traktManager.addToHistory(movies: [], shows: [], episodes: []) { result in
             switch result {
-            case .success(let ids):
+            case let .success(ids):
                 XCTAssertEqual(ids.added.movies, 2)
                 XCTAssertEqual(ids.added.episodes, 72)
             case .error:
@@ -324,10 +324,10 @@ class SyncTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Remove items from history")
         try! traktManager.removeFromHistory(movies: [], shows: [], episodes: []) { result in
             switch result {
-            case .success(let ids):
+            case let .success(ids):
                 XCTAssertEqual(ids.deleted.movies, 2)
                 XCTAssertEqual(ids.deleted.episodes, 72)
-            case .error(let error):
+            case let .error(error):
                 XCTFail("Wrong status: \(String(describing: error))")
             }
             expectation.fulfill()
@@ -350,7 +350,7 @@ class SyncTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get ratings")
         traktManager.getRatings(type: .Movies, rating: 9) { result in
-            if case .success(let ratings) = result {
+            if case let .success(ratings) = result {
                 XCTAssertEqual(ratings.count, 2)
                 expectation.fulfill()
             }
@@ -374,7 +374,7 @@ class SyncTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Add rating")
         try! traktManager.addRatings(movies: [RatingId(trakt: 12345, rating: 10, ratedAt: Date())]) { result in
-            if case .success(let result) = result {
+            if case let .success(result) = result {
                 XCTAssertEqual(result.added.movies, 1)
                 XCTAssertEqual(result.added.shows, 1)
                 XCTAssertEqual(result.added.seasons, 1)
@@ -401,7 +401,7 @@ class SyncTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Remove rating")
         try! traktManager.removeRatings(movies: [], shows: [], episodes: []) { result in
-            if case .success(let result) = result {
+            if case let .success(result) = result {
                 XCTAssertEqual(result.deleted.movies, 1)
                 XCTAssertEqual(result.deleted.shows, 1)
                 XCTAssertEqual(result.deleted.seasons, 1)
@@ -427,7 +427,7 @@ class SyncTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get watchlist")
         traktManager.getWatchlist(watchType: .Movies) { result in
-            if case .success(let watchlist, _, _) = result {
+            if case let .success(watchlist, _, _) = result {
                 XCTAssertEqual(watchlist.count, 2)
                 expectation.fulfill()
             }

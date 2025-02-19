@@ -1,16 +1,16 @@
 //
-//  DateParser.swift
-//  TraktKit
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 1/25/16.
-//  Copyright © 2016 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
 import Foundation
 
 // Internal
-internal let calendar = Calendar.current
-internal let dateFormatter = DateFormatter()
+let calendar = Calendar.current
+let dateFormatter = DateFormatter()
 
 @Sendable
 public func customDateDecodingStrategy(decoder: Decoder) throws -> Date {
@@ -19,15 +19,15 @@ public func customDateDecodingStrategy(decoder: Decoder) throws -> Date {
     return try Date.dateFromString(str)
 }
 
-internal extension Date {
-    
+extension Date {
+
     enum DateParserError: Error {
         case failedToParseDateFromString(String)
         case typeUnhandled(Any?)
     }
-    
+
     // MARK: - Class
-    
+
     static func dateFromString(_ string: Any?) throws -> Date {
         if let dateString = string as? String {
 
@@ -43,7 +43,10 @@ internal extension Date {
             if let date = ISO8601DateFormatter.date(from: dateString) {
                 return date
             } else {
-                throw DateParserError.failedToParseDateFromString("String to parse: \(dateString), date format: \(String(describing: ISO8601DateFormatter.dateFormat))")
+                throw DateParserError
+                    .failedToParseDateFromString(
+                        "String to parse: \(dateString), date format: \(String(describing: ISO8601DateFormatter.dateFormat))"
+                    )
             }
         } else if let date = string as? Date {
             return date
@@ -51,14 +54,14 @@ internal extension Date {
             throw DateParserError.typeUnhandled(string)
         }
     }
-    
+
     func UTCDateString() -> String {
         dateFormatter.timeZone = TimeZone(identifier: "UTC")
         let UTCString = self.dateString(withFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
         dateFormatter.timeZone = TimeZone.current
         return UTCString
     }
-    
+
     func dateString(withFormat format: String) -> String {
         ISO8601DateFormatter.dateFormat = format
         return ISO8601DateFormatter.string(from: self)

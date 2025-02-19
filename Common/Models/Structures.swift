@@ -1,9 +1,9 @@
 //
-//  Structures.swift
-//  TraktKit
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 1/4/16.
-//  Copyright © 2016 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
 import Foundation
@@ -20,7 +20,7 @@ public struct ID: Codable, Hashable {
     public let imdb: String?
     public let tmdb: Int?
     public let tvRage: Int?
-    
+
     enum CodingKeys: String, CodingKey {
         case trakt
         case slug
@@ -29,7 +29,7 @@ public struct ID: Codable, Hashable {
         case tmdb
         case tvRage = "tvrage"
     }
-    
+
     public init(trakt: Int, slug: String, tvdb: Int? = nil, imdb: String? = nil, tmdb: Int? = nil, tvRage: Int? = nil) {
         self.trakt = trakt
         self.slug = slug
@@ -41,19 +41,19 @@ public struct ID: Codable, Hashable {
 }
 
 public struct SeasonId: Codable, Hashable {
-    
+
     public let trakt: Int
     public let tvdb: Int?
     public let tmdb: Int?
     public let tvRage: Int?
-    
+
     enum CodingKeys: String, CodingKey {
         case trakt
         case tvdb
         case tmdb
         case tvRage = "tvrage"
     }
-    
+
     public init(trakt: Int, tvdb: Int? = nil, tmdb: Int? = nil, tvRage: Int? = nil) {
         self.trakt = trakt
         self.tvdb = tvdb
@@ -68,7 +68,7 @@ public struct EpisodeId: Codable, Hashable {
     public let imdb: String?
     public let tmdb: Int?
     public let tvRage: Int?
-    
+
     enum CodingKeys: String, CodingKey {
         case trakt
         case tvdb
@@ -76,7 +76,7 @@ public struct EpisodeId: Codable, Hashable {
         case tmdb
         case tvRage = "tvrage"
     }
-    
+
     public init(trakt: Int, tvdb: Int? = nil, imdb: String? = nil, tmdb: Int? = nil, tvRage: Int? = nil) {
         self.trakt = trakt
         self.tvdb = tvdb
@@ -89,12 +89,12 @@ public struct EpisodeId: Codable, Hashable {
 public struct ListId: Codable, Hashable {
     public let trakt: Int
     public let slug: String
-    
+
     enum CodingKeys: String, CodingKey {
         case trakt
         case slug
     }
-    
+
     public init(trakt: Int, slug: String) {
         self.trakt = trakt
         self.slug = slug
@@ -111,7 +111,7 @@ public struct TraktStats: Codable, Hashable {
     public let comments: Int
     public let lists: Int
     public let votes: Int
-    
+
     enum CodingKeys: String, CodingKey {
         case watchers
         case plays
@@ -143,7 +143,7 @@ public struct TraktLastActivityMovies: Codable, Hashable {
     public let commentedAt: Date
     public let pausedAt: Date
     public let hiddenAt: Date
-    
+
     enum CodingKeys: String, CodingKey {
         case watchedAt = "watched_at"
         case collectedAt = "collected_at"
@@ -162,7 +162,7 @@ public struct TraktLastActivityEpisodes: Codable, Hashable {
     public let watchlistedAt: Date
     public let commentedAt: Date
     public let pausedAt: Date
-    
+
     enum CodingKeys: String, CodingKey {
         case watchedAt = "watched_at"
         case collectedAt = "collected_at"
@@ -178,7 +178,7 @@ public struct TraktLastActivityShows: Codable, Hashable {
     public let watchlistedAt: Date
     public let commentedAt: Date
     public let hiddenAt: Date
-    
+
     enum CodingKeys: String, CodingKey {
         case ratedAt = "rated_at"
         case watchlistedAt = "watchlisted_at"
@@ -192,7 +192,7 @@ public struct TraktLastActivitySeasons: Codable, Hashable {
     public let watchlistedAt: Date
     public let commentedAt: Date
     public let hiddenAt: Date
-    
+
     enum CodingKeys: String, CodingKey {
         case ratedAt = "rated_at"
         case watchlistedAt = "watchlisted_at"
@@ -203,7 +203,7 @@ public struct TraktLastActivitySeasons: Codable, Hashable {
 
 public struct TraktLastActivityComments: Codable, Hashable {
     public let likedAt: Date
-    
+
     enum CodingKeys: String, CodingKey {
         case likedAt = "liked_at"
     }
@@ -213,7 +213,7 @@ public struct TraktLastActivityLists: Codable, Hashable {
     public let likedAt: Date
     public let updatedAt: Date
     public let commentedAt: Date
-    
+
     enum CodingKeys: String, CodingKey {
         case likedAt = "liked_at"
         case updatedAt = "updated_at"

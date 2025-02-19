@@ -1,30 +1,30 @@
 //
-//  TraktCollectedItem.swift
-//  TraktKit
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 10/21/16.
-//  Copyright © 2016 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
 import Foundation
 
 public struct TraktCollectedItem: Codable, Hashable {
-    
+
     public var lastCollectedAt: Date
     public let lastUpdatedAt: Date
-    
+
     public var movie: TraktMovie?
     public var show: TraktShow?
     public var seasons: [TraktCollectedSeason]?
     public var metadata: Metadata?
-    
+
     enum MovieCodingKeys: String, CodingKey {
         case lastCollectedAt = "collected_at"
         case lastUpdatedAt = "updated_at"
         case movie
         case metadata
     }
-    
+
     enum ShowCodingKeys: String, CodingKey {
         case lastCollectedAt = "last_collected_at"
         case lastUpdatedAt = "last_updated_at"
@@ -63,7 +63,7 @@ public struct TraktCollectedItem: Codable, Hashable {
             try container.encode(lastUpdatedAt, forKey: .lastUpdatedAt)
         }
     }
-    
+
     public struct Metadata: Codable, Hashable {
         public let mediaType: MediaType?
         public let resolution: Resolution?
@@ -71,7 +71,7 @@ public struct TraktCollectedItem: Codable, Hashable {
         public let audio: Audio?
         public let audioChannels: AudioChannels?
         public let is3D: Bool
-        
+
         enum CodingKeys: String, CodingKey {
             case mediaType = "media_type"
             case resolution
@@ -80,7 +80,7 @@ public struct TraktCollectedItem: Codable, Hashable {
             case audioChannels = "audio_channels"
             case is3D = "3d"
         }
-        
+
         /// Custom decoder to fail silently if Trakt adds new metadata option.
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -92,7 +92,7 @@ public struct TraktCollectedItem: Codable, Hashable {
             is3D = try container.decodeIfPresent(Bool.self, forKey: .is3D) ?? false
         }
     }
-    
+
     public enum MediaType: String, Codable {
         case digital
         case bluray
@@ -103,7 +103,7 @@ public struct TraktCollectedItem: Codable, Hashable {
         case betamax
         case videoCD = "vcd"
     }
-    
+
     public enum Resolution: String, Codable {
         case udh4k = "uhd_4k"
         case hd1080p = "hd_1080p"
@@ -114,14 +114,14 @@ public struct TraktCollectedItem: Codable, Hashable {
         case sd576p = "sd_576p"
         case sd576i = "sd_576i"
     }
-    
+
     public enum HDR: String, Codable {
         case dolbyVision = "dolby_vision"
-        case hdr10 = "hdr10"
+        case hdr10
         case hdr10Plus = "hdr10_plus"
         case hlg
     }
-    
+
     public enum Audio: String, Codable {
         case dolbyDigital = "dolby_digital"
         case dolbyDigitalPlus = "dolby_digital_plus"
@@ -143,7 +143,7 @@ public struct TraktCollectedItem: Codable, Hashable {
         case wma
         case flac
     }
-    
+
     public enum AudioChannels: String, Codable {
         case tenOne = "10.1"
         case nineOne = "9.1"
@@ -166,18 +166,18 @@ public struct TraktCollectedItem: Codable, Hashable {
 }
 
 public struct TraktCollectedSeason: Codable, Hashable {
-    
+
     /// Season number
     public var number: Int
     public var episodes: [TraktCollectedEpisode]
 }
 
 public struct TraktCollectedEpisode: Codable, Hashable {
-    
+
     public var number: Int
     public var collectedAt: Date
     public var metadata: TraktCollectedItem.Metadata?
-    
+
     enum CodingKeys: String, CodingKey {
         case number
         case collectedAt = "collected_at"

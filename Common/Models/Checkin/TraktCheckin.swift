@@ -1,9 +1,9 @@
 //
-//  TraktCheckin.swift
-//  TraktKit
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 10/29/16.
-//  Copyright © 2016 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
 import Foundation
@@ -33,16 +33,28 @@ public struct TraktCheckinBody: Codable {
     public let appVersion: String?
     /// Build date of the app.
     public let appDate: String?
-    
+
     enum CodingKeys: String, CodingKey {
-        case movie, episode, sharing, message
+        case movie
+        case episode
+        case sharing
+        case message
         case venueId = "venue_id"
-        case venueName = "venueName"
+        case venueName
         case appVersion = "app_version"
         case appDate = "app_date"
     }
-    
-    public init(movie: SyncId? = nil, episode: SyncId? = nil, sharing: ShareSettings? = nil, message: String? = nil, venueId: String? = nil, venueName: String? = nil, appVersion: String? = nil, appDate: String? = nil) {
+
+    public init(
+        movie: SyncId? = nil,
+        episode: SyncId? = nil,
+        sharing: ShareSettings? = nil,
+        message: String? = nil,
+        venueId: String? = nil,
+        venueName: String? = nil,
+        appVersion: String? = nil,
+        appDate: String? = nil
+    ) {
         self.movie = movie
         self.episode = episode
         self.sharing = sharing
@@ -55,24 +67,24 @@ public struct TraktCheckinBody: Codable {
 }
 
 public struct TraktCheckinResponse: Codable, Hashable {
-    
+
     /// A unique history id (64-bit integer) used to reference this checkin directly.
     public let id: Int
     public let watchedAt: Date
     public let sharing: ShareSettings
-    
+
     /// If the user checked in to a movie, a movie object will be returned with it's name
     public let movie: TraktMovie?
     /// If the user checked in to an episode, a show object will be returned with it's name
     public let show: TraktShow?
     /// If the user checked in to an episode, an episode object will be returned with it's name, season + episode number.
     public let episode: TraktEpisode?
-    
+
     enum CodingKeys: String, CodingKey {
         case id
         case watchedAt = "watched_at"
         case sharing
-        
+
         case movie
         case show
         case episode

@@ -1,9 +1,9 @@
 //
-//  TraktShow.swift
-//  TraktKit
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 4/13/16.
-//  Copyright © 2016 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
 import Foundation
@@ -12,7 +12,7 @@ public struct Airs: Codable, Hashable {
     public let day: String?
     public let time: String?
     public let timezone: String?
-    
+
     public init(day: String? = nil, time: String? = nil, timezone: String? = nil) {
         self.day = day
         self.time = time
@@ -21,12 +21,12 @@ public struct Airs: Codable, Hashable {
 }
 
 public struct TraktShow: Codable, Hashable {
-    
+
     // Extended: Min
     public let title: String
     public let year: Int?
     public let ids: ID
-    
+
     // Extended: Full
     public let overview: String?
     public let firstAired: Date?
@@ -45,12 +45,12 @@ public struct TraktShow: Codable, Hashable {
     public let availableTranslations: [String]?
     public let genres: [String]?
     public let airedEpisodes: Int?
-    
+
     enum CodingKeys: String, CodingKey {
         case title
         case year
         case ids
-        
+
         case overview
         case firstAired = "first_aired"
         case airs
@@ -69,13 +69,13 @@ public struct TraktShow: Codable, Hashable {
         case genres
         case airedEpisodes = "aired_episodes"
     }
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         title = try container.decode(String.self, forKey: CodingKeys.title)
         year = try container.decodeIfPresent(Int.self, forKey: CodingKeys.year)
         ids = try container.decode(ID.self, forKey: CodingKeys.ids)
-        
+
         overview = try container.decodeIfPresent(String.self, forKey: CodingKeys.overview)
         firstAired = try container.decodeIfPresent(Date.self, forKey: CodingKeys.firstAired)
         airs = try container.decodeIfPresent(Airs.self, forKey: CodingKeys.airs)
@@ -94,8 +94,29 @@ public struct TraktShow: Codable, Hashable {
         genres = try container.decodeIfPresent([String].self, forKey: .genres)
         airedEpisodes = try container.decodeIfPresent(Int.self, forKey: .airedEpisodes)
     }
-    
-    public init(title: String, year: Int? = nil, ids: ID, overview: String? = nil, firstAired: Date? = nil, airs: Airs? = nil, runtime: Int? = nil, certification: String? = nil, network: String? = nil, country: String? = nil, trailer: URL? = nil, homepage: URL? = nil, status: String? = nil, rating: Double? = nil, votes: Int? = nil, updatedAt: Date? = nil, language: String? = nil, availableTranslations: [String]? = nil, genres: [String]? = nil, airedEpisodes: Int? = nil) {
+
+    public init(
+        title: String,
+        year: Int? = nil,
+        ids: ID,
+        overview: String? = nil,
+        firstAired: Date? = nil,
+        airs: Airs? = nil,
+        runtime: Int? = nil,
+        certification: String? = nil,
+        network: String? = nil,
+        country: String? = nil,
+        trailer: URL? = nil,
+        homepage: URL? = nil,
+        status: String? = nil,
+        rating: Double? = nil,
+        votes: Int? = nil,
+        updatedAt: Date? = nil,
+        language: String? = nil,
+        availableTranslations: [String]? = nil,
+        genres: [String]? = nil,
+        airedEpisodes: Int? = nil
+    ) {
         self.title = title
         self.year = year
         self.ids = ids

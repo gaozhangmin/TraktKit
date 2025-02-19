@@ -1,13 +1,13 @@
 //
-//  TraktProfileViewController.swift
-//  TraktKitExample
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Litteral, Maximilian on 1/11/19.
-//  Copyright © 2019 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
-import UIKit
 import TraktKit
+import UIKit
 
 final class TraktProfileViewController: UIViewController {
 
@@ -19,7 +19,7 @@ final class TraktProfileViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setup()
     }
 
@@ -28,11 +28,11 @@ final class TraktProfileViewController: UIViewController {
 
         TraktManager.sharedManager.getUserProfile { [weak self] result in
             switch result {
-            case .success(let user):
+            case let .success(user):
                 DispatchQueue.main.async { [weak self] in
                     self?.refreshUI(for: user)
                 }
-            case .error(let error):
+            case let .error(error):
                 print("Failed to get user profile: \(String(describing: error?.localizedDescription))")
             }
         }

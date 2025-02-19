@@ -9,24 +9,25 @@ let package = Package(
         .macOS(.v12),
         .iOS(.v15),
         .tvOS(.v15),
-        .watchOS(.v8)
+        .watchOS(.v8),
     ],
     products: [
         .library(
             name: "TraktKit",
-            targets: ["TraktKit"]),
+            targets: ["TraktKit"]
+        ),
     ],
     targets: [
         .target(
             name: "TraktKit",
             dependencies: [],
             path: "Common"
-            ),
+        ),
         .testTarget(
             name: "TraktKitTests",
             dependencies: ["TraktKit"],
             resources: [
-                .process("Models")
+                .process("Models"),
             ]
         ),
     ],

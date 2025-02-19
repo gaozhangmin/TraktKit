@@ -1,9 +1,9 @@
 //
-//  TraktMovie.swift
-//  TraktKit
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 4/13/16.
-//  Copyright © 2016 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
 import Foundation
@@ -14,7 +14,7 @@ public struct TraktMovie: Codable, Hashable {
     public let title: String
     public let year: Int?
     public let ids: ID
-    
+
     // Extended: Full
     public let tagline: String?
     public let overview: String?
@@ -29,12 +29,12 @@ public struct TraktMovie: Codable, Hashable {
     public let availableTranslations: [String]?
     public let genres: [String]?
     public let certification: String?
-    
+
     enum CodingKeys: String, CodingKey {
         case title
         case year
         case ids
-        
+
         case tagline
         case overview
         case released
@@ -70,8 +70,25 @@ public struct TraktMovie: Codable, Hashable {
         availableTranslations = try container.decodeIfPresent([String].self, forKey: .availableTranslations)
         genres = try container.decodeIfPresent([String].self, forKey: .genres)
     }
-    
-    public init(title: String, year: Int? = nil, ids: ID, tagline: String? = nil, overview: String? = nil, released: Date? = nil, runtime: Int? = nil, trailer: URL? = nil, homepage: URL? = nil, rating: Double? = nil, votes: Int? = nil, updatedAt: Date? = nil, language: String? = nil, availableTranslations: [String]? = nil, genres: [String]? = nil, certification: String? = nil) {
+
+    public init(
+        title: String,
+        year: Int? = nil,
+        ids: ID,
+        tagline: String? = nil,
+        overview: String? = nil,
+        released: Date? = nil,
+        runtime: Int? = nil,
+        trailer: URL? = nil,
+        homepage: URL? = nil,
+        rating: Double? = nil,
+        votes: Int? = nil,
+        updatedAt: Date? = nil,
+        language: String? = nil,
+        availableTranslations: [String]? = nil,
+        genres: [String]? = nil,
+        certification: String? = nil
+    ) {
         self.title = title
         self.year = year
         self.ids = ids

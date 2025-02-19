@@ -1,17 +1,17 @@
 //
-//  CheckinTests.swift
-//  TraktKitTests
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 3/24/18.
-//  Copyright © 2018 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
-import XCTest
 import Foundation
 @testable import TraktKit
+import XCTest
 
 class CheckinTests: XCTestCase {
-    
+
     let session = MockURLSession()
     lazy var traktManager = TestTraktManager(session: session)
 
@@ -29,8 +29,8 @@ class CheckinTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Checkin a movie")
         let checkin = TraktCheckinBody(movie: SyncId(trakt: 12345))
         try! traktManager.checkIn(checkin) { result in
-            if case .success(let checkin) = result {
-                XCTAssertEqual(checkin.id, 3373536619)
+            if case let .success(checkin) = result {
+                XCTAssertEqual(checkin.id, 3_373_536_619)
                 XCTAssertNotNil(checkin.movie)
                 expectation.fulfill()
             }
@@ -53,8 +53,8 @@ class CheckinTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Checkin a episode")
         let checkin = TraktCheckinBody(episode: SyncId(trakt: 12345))
         try! traktManager.checkIn(checkin) { result in
-            if case .success(let checkin) = result {
-                XCTAssertEqual(checkin.id, 3373536620)
+            if case let .success(checkin) = result {
+                XCTAssertEqual(checkin.id, 3_373_536_620)
                 XCTAssertNotNil(checkin.episode)
                 XCTAssertNotNil(checkin.show)
                 expectation.fulfill()
@@ -78,7 +78,7 @@ class CheckinTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Checkin an existing item")
         let checkin = TraktCheckinBody(episode: SyncId(trakt: 12345))
         try! traktManager.checkIn(checkin) { result in
-            if case .checkedIn(let expiration) = result {
+            if case let .checkedIn(expiration) = result {
                 XCTAssertEqual(expiration.dateString(withFormat: "YYYY-MM-dd"), "2014-10-15")
                 expectation.fulfill()
             }

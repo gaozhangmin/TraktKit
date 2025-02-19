@@ -1,9 +1,9 @@
 //
-//  TraktCrewMember.swift
-//  TraktKit
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 4/13/16.
-//  Copyright © 2016 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
 import Foundation
@@ -16,7 +16,7 @@ public struct TVCrewMember: Codable, Hashable {
     /// Not available for /episodes/{number}/people
     public let episodeCount: Int?
     public let person: Person
-    
+
     enum CodingKeys: String, CodingKey {
         case jobs
         case job
@@ -31,7 +31,7 @@ public struct MovieCrewMember: Codable, Hashable {
     @available(*, deprecated, renamed: "jobs")
     public let job: String
     public let person: Person
-    
+
     enum CodingKeys: String, CodingKey {
         case jobs
         case job
@@ -46,7 +46,7 @@ public struct PeopleTVCrewMember: Codable, Hashable {
     public let job: String
     public let episodeCount: Int
     public let show: TraktShow
-    
+
     enum CodingKeys: String, CodingKey {
         case jobs
         case job
@@ -55,14 +55,13 @@ public struct PeopleTVCrewMember: Codable, Hashable {
     }
 }
 
-
 /// Cast member for /people/.../movies API
 public struct PeopleMovieCrewMember: Codable, Hashable {
     public let jobs: [String]
     @available(*, deprecated, renamed: "jobs")
     public let job: String
     public let movie: TraktMovie
-    
+
     enum CodingKeys: String, CodingKey {
         case jobs
         case job

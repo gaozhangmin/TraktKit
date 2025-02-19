@@ -1,13 +1,13 @@
 //
-//  AuthenticationInfoTests.swift
-//  TraktKitTests
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 10/7/19.
-//  Copyright © 2019 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
-import XCTest
 @testable import TraktKit
+import XCTest
 
 class AuthenticationInfoTests: XCTestCase {
 
@@ -18,6 +18,6 @@ class AuthenticationInfoTests: XCTestCase {
         XCTAssertEqual(authenticationInfo.expiresIn, 7200)
         XCTAssertEqual(authenticationInfo.refreshToken, "76ba4c5c75c96f6087f58a4de10be6c00b29ea1ddc3b2022ee2016d1363e3a7c")
         XCTAssertEqual(authenticationInfo.scope, "public")
-        XCTAssertEqual(authenticationInfo.createdAt, 1487889741)
+        XCTAssertEqual(authenticationInfo.createdAt, 1_487_889_741)
     }
 }

@@ -1,14 +1,14 @@
 //
-//  CalendarTests.swift
-//  TraktKitTests
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 3/23/18.
-//  Copyright © 2018 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
-import XCTest
 import Foundation
 @testable import TraktKit
+import XCTest
 
 class CalendarTests: XCTestCase {
 
@@ -29,7 +29,7 @@ class CalendarTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "My Shows")
         traktManager.myShows(startDateString: "2014-09-01", days: 7) { result in
-            if case .success(let myShows) = result {
+            if case let .success(myShows) = result {
                 XCTAssertEqual(myShows.count, 4)
                 expectation.fulfill()
             }
@@ -54,7 +54,7 @@ class CalendarTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "My New Shows")
         traktManager.myNewShows(startDateString: "2014-09-01", days: 7) { result in
-            if case .success(let myShows) = result {
+            if case let .success(myShows) = result {
                 XCTAssertEqual(myShows.count, 1)
                 expectation.fulfill()
             }
@@ -79,7 +79,7 @@ class CalendarTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "My New Seasons")
         traktManager.mySeasonPremieres(startDateString: "2014-09-01", days: 7) { result in
-            if case .success(let premieres) = result {
+            if case let .success(premieres) = result {
                 XCTAssertEqual(premieres.count, 2)
                 expectation.fulfill()
             }
@@ -104,7 +104,7 @@ class CalendarTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "My movies")
         traktManager.myMovies(startDateString: "2014-09-01", days: 7) { result in
-            if case .success(let movies) = result {
+            if case let .success(movies) = result {
                 XCTAssertEqual(movies.count, 3)
                 expectation.fulfill()
             }
@@ -127,7 +127,7 @@ class CalendarTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "My dvds")
         traktManager.myDVDReleases(startDateString: "2014-09-01", days: 7) { result in
-            if case .success(let dvds) = result {
+            if case let .success(dvds) = result {
                 XCTAssertEqual(dvds.count, 3)
                 expectation.fulfill()
             }
@@ -150,7 +150,7 @@ class CalendarTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "All Shows")
         traktManager.allShows(startDateString: "2014-09-01", days: 7) { result in
-            if case .success(let allShows) = result {
+            if case let .success(allShows) = result {
                 XCTAssertEqual(allShows.count, 4)
                 expectation.fulfill()
             }
@@ -173,7 +173,7 @@ class CalendarTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "All New Shows")
         traktManager.allNewShows(startDateString: "2014-09-01", days: 7) { result in
-            if case .success(let newShows) = result {
+            if case let .success(newShows) = result {
                 XCTAssertEqual(newShows.count, 1)
                 expectation.fulfill()
             }
@@ -196,7 +196,7 @@ class CalendarTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "All Season Premieres")
         traktManager.allSeasonPremieres(startDateString: "2014-09-01", days: 7) { result in
-            if case .success(let allPremiers) = result {
+            if case let .success(allPremiers) = result {
                 XCTAssertEqual(allPremiers.count, 2)
                 expectation.fulfill()
             }
@@ -219,7 +219,7 @@ class CalendarTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "All Movies")
         traktManager.allMovies(startDateString: "2014-09-01", days: 7) { result in
-            if case .success(let allMovies) = result {
+            if case let .success(allMovies) = result {
                 XCTAssertEqual(allMovies.count, 3)
                 expectation.fulfill()
             }
@@ -242,7 +242,7 @@ class CalendarTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "All DVDs")
         traktManager.allDVD(startDateString: "2014-09-01", days: 7) { result in
-            if case .success(let allDVDs) = result {
+            if case let .success(allDVDs) = result {
                 XCTAssertEqual(allDVDs.count, 3)
                 expectation.fulfill()
             }

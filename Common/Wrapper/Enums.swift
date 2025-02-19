@@ -1,9 +1,9 @@
 //
-//  Enums.swift
-//  TraktKit
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 6/22/16.
-//  Copyright © 2016 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
 import Foundation
@@ -19,7 +19,7 @@ public enum Method: String {
     case DELETE
 }
 
-public struct StatusCodes {
+public enum StatusCodes {
     /// Success
     public static let Success = 200
     /// Success - new resource created (POST)
@@ -75,9 +75,9 @@ public struct StatusCodes {
             return "This feature is VIP only with Trakt. Please see Trakt.tv for more information."
         case RateLimitExceeded:
             return "Rate Limit Exceeded. Please try again in a minute."
-        case ServerError..<CloudflareError:
+        case ServerError ..< CloudflareError:
             return "Trakt.tv is down. Please try again later."
-        case CloudflareError..<600:
+        case CloudflareError ..< 600:
             return "CloudFlare error. Please try again later."
         default:
             return nil
@@ -96,8 +96,9 @@ public enum SearchType: String {
     public struct Field {
         public let title: String
     }
-    public struct Fields {
-        public struct Movie {
+
+    public enum Fields {
+        public enum Movie {
             public static let title = Field(title: "title")
             public static let tagline = Field(title: "tagline")
             public static let overview = Field(title: "overview")
@@ -106,7 +107,7 @@ public enum SearchType: String {
             public static let aliases = Field(title: "aliases")
         }
 
-        public struct Show {
+        public enum Show {
             public static let title = Field(title: "title")
             public static let overview = Field(title: "overview")
             public static let people = Field(title: "people")
@@ -114,17 +115,17 @@ public enum SearchType: String {
             public static let aliases = Field(title: "aliases")
         }
 
-        public struct Episode {
+        public enum Episode {
             public static let title = Field(title: "title")
             public static let overview = Field(title: "overview")
         }
 
-        public struct Person {
+        public enum Person {
             public static let name = Field(title: "name")
             public static let biography = Field(title: "biography")
         }
 
-        public struct List {
+        public enum List {
             public static let name = Field(title: "name")
             public static let description = Field(title: "description")
         }
@@ -141,40 +142,41 @@ public enum LookupType {
 
     var name: String {
         switch self {
-            case .Trakt:
-                return "trakt"
-            case .IMDB:
-                return "imdb"
-            case .TMDB:
-                return "tmdb"
-            case .TVDB:
-                return "tvdb"
-            case .TVRage:
-                return "tvrage"
+        case .Trakt:
+            return "trakt"
+        case .IMDB:
+            return "imdb"
+        case .TMDB:
+            return "tmdb"
+        case .TVDB:
+            return "tvdb"
+        case .TVRage:
+            return "tvrage"
         }
     }
 
     var id: String {
         switch self {
-        case .Trakt(let id):
+        case let .Trakt(id):
             return "\(id)"
-        case .IMDB(let id):
+        case let .IMDB(id):
             return id
-        case .TMDB(let id):
+        case let .TMDB(id):
             return "\(id)"
-        case .TVDB(let id):
+        case let .TVDB(id):
             return "\(id)"
-        case .TVRage(let id):
+        case let .TVRage(id):
             return "\(id)"
         }
     }
 }
 
 public enum MediaType: String, CustomStringConvertible {
-    case movies, shows
+    case movies
+    case shows
 
     public var description: String {
-        return self.rawValue
+        self.rawValue
     }
 }
 
@@ -183,9 +185,10 @@ public enum WatchedType: String, CustomStringConvertible {
     case Shows = "shows"
     case Seasons = "seasons"
     case Episodes = "episodes"
+    case All = "all"
 
     public var description: String {
-        return self.rawValue
+        self.rawValue
     }
 }
 
@@ -198,7 +201,7 @@ public enum Type2: String, CustomStringConvertible {
     case Lists = "lists"
 
     public var description: String {
-        return self.rawValue
+        self.rawValue
     }
 }
 
@@ -209,7 +212,7 @@ public enum ListType: String, CustomStringConvertible {
     case watchlists
 
     public var description: String {
-        return self.rawValue
+        self.rawValue
     }
 }
 
@@ -222,15 +225,15 @@ public enum ListSortType: String, CustomStringConvertible {
     case updated
 
     public var description: String {
-        return self.rawValue
+        self.rawValue
     }
 }
 
 /// Type of comments
 public enum CommentType: String {
-    case all = "all"
-    case reviews = "reviews"
-    case shouts = "shouts"
+    case all
+    case reviews
+    case shouts
 }
 
 /// Extended information
@@ -249,13 +252,13 @@ public enum ExtendedType: String, CustomStringConvertible {
     case guestStars = "guest_stars"
 
     public var description: String {
-        return self.rawValue
+        self.rawValue
     }
 }
 
 extension Sequence where Iterator.Element: CustomStringConvertible {
     func queryString() -> String {
-        return self.map { $0.description }.joined(separator: ",") // Search with multiple types
+        self.map(\.description).joined(separator: ",") // Search with multiple types
     }
 }
 
@@ -288,7 +291,7 @@ public enum SectionType: String {
 public enum HiddenItemsType: String {
     case Movie = "movie"
     case Show = "show"
-    case Season = "Season"
+    case Season
 }
 
 public enum LikeType: String {

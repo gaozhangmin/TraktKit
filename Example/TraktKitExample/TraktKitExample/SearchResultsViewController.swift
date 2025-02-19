@@ -1,17 +1,18 @@
 //
-//  SearchResultsViewController.swift
-//  TraktKitExample
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Litteral, Maximilian on 1/17/19.
-//  Copyright © 2019 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
-import UIKit
 import TraktKit
+import UIKit
 
 final class SearchResultsViewController: UITableViewController {
 
     // MARK: - Properties
+
     private var shows: [TraktShow] = [] {
         didSet {
             tableView.reloadData()
@@ -22,6 +23,7 @@ final class SearchResultsViewController: UITableViewController {
 
     // MARK: - Lifecycle
 
+    @available(*, unavailable)
     required init?(coder aDecoder: NSCoder) {
         fatalError()
     }
@@ -45,26 +47,27 @@ final class SearchResultsViewController: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        TraktManager.sharedManager.search(query: query, types: [.show], extended: [.Full], pagination: nil, filters: nil, fields: nil) { [weak self] result in
-            switch result {
-            case .success(let objects):
-                DispatchQueue.main.async {
-                    self?.shows = objects.compactMap { $0.show }
+        TraktManager.sharedManager
+            .search(query: query, types: [.show], extended: [.Full], pagination: nil, filters: nil, fields: nil) { [weak self] result in
+                switch result {
+                case let .success(objects):
+                    DispatchQueue.main.async {
+                        self?.shows = objects.compactMap(\.show)
+                    }
+                case let .error(error):
+                    print("Failed to get search results: \(String(describing: error?.localizedDescription))")
                 }
-            case .error(let error):
-                print("Failed to get search results: \(String(describing: error?.localizedDescription))")
             }
-        }
     }
 
     // MARK: - UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return shows.count
+        shows.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -80,11 +83,11 @@ final class SearchResultsViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
 
         func dataOrUnknown(_ input: String?) -> String {
-            return input ?? "Unknown"
+            input ?? "Unknown"
         }
 
         func numberOrUnknown(_ input: Int?) -> String {
-            return input != nil ? "\(input!)" : "Unknown"
+            input != nil ? "\(input!)" : "Unknown"
         }
 
         let show = shows[indexPath.row]

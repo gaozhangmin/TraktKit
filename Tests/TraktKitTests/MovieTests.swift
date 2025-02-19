@@ -1,14 +1,14 @@
 //
-//  MovieTests.swift
-//  TraktKitTests
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 6/13/17.
-//  Copyright © 2017 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
-import XCTest
 import Foundation
 @testable import TraktKit
+import XCTest
 
 class MovieTests: XCTestCase {
 
@@ -21,7 +21,7 @@ class MovieTests: XCTestCase {
         session.nextStatusCode = StatusCodes.Success
         session.nextError = nil
     }
-    
+
     // MARK: - Trending
 
     func test_get_trending_movies() {
@@ -29,7 +29,7 @@ class MovieTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get Trending Movies")
         traktManager.getTrendingMovies(pagination: Pagination(page: 1, limit: 10)) { result in
-            if case .success(let trendingMovies, _, _) = result {
+            if case let .success(trendingMovies, _, _) = result {
                 XCTAssertEqual(trendingMovies.count, 2)
                 expectation.fulfill()
             }
@@ -55,7 +55,7 @@ class MovieTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get Popular Movies")
         traktManager.getPopularMovies(pagination: Pagination(page: 1, limit: 10)) { result in
-            if case .success(let popularMovies, _, _) = result {
+            if case let .success(popularMovies, _, _) = result {
                 XCTAssertEqual(popularMovies.count, 10)
                 expectation.fulfill()
             }
@@ -80,7 +80,7 @@ class MovieTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get Most Played Movies")
         traktManager.getPlayedMovies(period: .All, pagination: Pagination(page: 1, limit: 10)) { result in
-            if case .success(let playedMovies, _, _) = result {
+            if case let .success(playedMovies, _, _) = result {
                 XCTAssertEqual(playedMovies.count, 10)
                 expectation.fulfill()
             }
@@ -105,7 +105,7 @@ class MovieTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get Most Watched Movies")
         traktManager.getWatchedMovies(period: .All, pagination: Pagination(page: 1, limit: 10)) { result in
-            if case .success(let watchedMovies, _, _) = result {
+            if case let .success(watchedMovies, _, _) = result {
                 XCTAssertEqual(watchedMovies.count, 10)
                 expectation.fulfill()
             }
@@ -130,7 +130,7 @@ class MovieTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get Most Collected Movies")
         traktManager.getCollectedMovies(period: .All, pagination: Pagination(page: 1, limit: 10)) { result in
-            if case .success(let collectedMovies, _, _) = result {
+            if case let .success(collectedMovies, _, _) = result {
                 XCTAssertEqual(collectedMovies.count, 10)
                 expectation.fulfill()
             }
@@ -155,7 +155,7 @@ class MovieTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get Most Anticipated Movies")
         traktManager.getAnticipatedMovies(pagination: Pagination(page: 1, limit: 10)) { result in
-            if case .success(let anticipatedMovies, _, _) = result {
+            if case let .success(anticipatedMovies, _, _) = result {
                 XCTAssertEqual(anticipatedMovies.count, 10)
                 expectation.fulfill()
             }
@@ -180,7 +180,7 @@ class MovieTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get Weekend Box Office")
         traktManager.getWeekendBoxOffice { result in
-            if case .success(let boxOffice) = result {
+            if case let .success(boxOffice) = result {
                 XCTAssertEqual(boxOffice.count, 10)
                 expectation.fulfill()
             }
@@ -202,12 +202,13 @@ class MovieTests: XCTestCase {
         session.nextData = jsonData(named: "test_get_recently_updated_movies")
 
         let expectation = XCTestExpectation(description: "Get recently updated movies")
-        traktManager.getUpdatedMovies(startDate: try? Date.dateFromString("2014-01-10"), pagination: Pagination(page: 1, limit: 10)) { result in
-            if case .success(let updatedMovies, _, _) = result {
-                XCTAssertEqual(updatedMovies.count, 2)
-                expectation.fulfill()
+        traktManager
+            .getUpdatedMovies(startDate: try? Date.dateFromString("2014-01-10"), pagination: Pagination(page: 1, limit: 10)) { result in
+                if case let .success(updatedMovies, _, _) = result {
+                    XCTAssertEqual(updatedMovies.count, 2)
+                    expectation.fulfill()
+                }
             }
-        }
         let result = XCTWaiter().wait(for: [expectation], timeout: 1)
         XCTAssertEqual(session.lastURL?.path, "/movies/updates/2014-01-10")
         XCTAssertTrue(session.lastURL?.query?.contains("extended=min") ?? false)
@@ -228,7 +229,7 @@ class MovieTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "MovieSummary")
         traktManager.getMovieSummary(movieID: "tron-legacy-2010") { result in
-            if case .success(let movie) = result {
+            if case let .success(movie) = result {
                 XCTAssertEqual(movie.title, "TRON: Legacy")
                 XCTAssertEqual(movie.year, 2010)
                 XCTAssertEqual(movie.ids.trakt, 1)
@@ -254,7 +255,7 @@ class MovieTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "MovieSummary")
         traktManager.getMovieSummary(movieID: "tron-legacy-2010", extended: [.Full]) { result in
-            if case .success(let movie) = result {
+            if case let .success(movie) = result {
                 XCTAssertEqual(movie.title, "TRON: Legacy")
                 XCTAssertEqual(movie.year, 2010)
                 XCTAssertEqual(movie.ids.trakt, 343)
@@ -293,7 +294,7 @@ class MovieTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get movie aliases")
         traktManager.getMovieAliases(movieID: "tron-legacy-2010") { result in
-            if case .success(let aliases) = result {
+            if case let .success(aliases) = result {
                 XCTAssertEqual(aliases.count, 15)
                 expectation.fulfill()
             }
@@ -316,7 +317,7 @@ class MovieTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get movie releases")
         traktManager.getMovieReleases(movieID: "tron-legacy-2010", country: "us") { result in
-            if case .success(let releases) = result {
+            if case let .success(releases) = result {
                 XCTAssertEqual(releases.count, 13)
                 expectation.fulfill()
             }
@@ -339,7 +340,7 @@ class MovieTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get movie translations")
         traktManager.getMovieTranslations(movieID: "tron-legacy-2010", language: "us") { result in
-            if case .success(let translations) = result {
+            if case let .success(translations) = result {
                 XCTAssertEqual(translations.count, 3)
                 expectation.fulfill()
             }
@@ -362,7 +363,7 @@ class MovieTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get movie comments")
         traktManager.getMovieComments(movieID: "tron-legacy-2010") { result in
-            if case .success(let comments, _, _) = result {
+            if case let .success(comments, _, _) = result {
                 XCTAssertEqual(comments.count, 1)
                 expectation.fulfill()
             }
@@ -385,7 +386,7 @@ class MovieTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get lists containing movie")
         traktManager.getListsContainingMovie(movieID: "tron-legacy-2010") { result in
-            if case .success(let lists, _, _) = result {
+            if case let .success(lists, _, _) = result {
                 XCTAssertEqual(lists.count, 1)
                 expectation.fulfill()
             }
@@ -408,7 +409,7 @@ class MovieTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get movie cast and crew")
         traktManager.getPeopleInMovie(movieID: "tron-legacy-2010") { result in
-            if case .success(let castAndCrew) = result {
+            if case let .success(castAndCrew) = result {
                 XCTAssertEqual(castAndCrew.writers?.count, 8)
                 XCTAssertEqual(castAndCrew.directors?.count, 2)
                 XCTAssertEqual(castAndCrew.cast?.count, 89)
@@ -433,7 +434,7 @@ class MovieTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get movie ratings")
         traktManager.getMovieRatings(movieID: "tron-legacy-2010") { result in
-            if case .success(let ratings) = result {
+            if case let .success(ratings) = result {
                 XCTAssertEqual(ratings.rating, 7.3377800000000004)
                 expectation.fulfill()
             }
@@ -456,7 +457,7 @@ class MovieTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get related movies")
         traktManager.getRelatedMovies(movieID: "tron-legacy-2010") { result in
-            if case .success(let relatedMovies) = result {
+            if case let .success(relatedMovies) = result {
                 XCTAssertEqual(relatedMovies.count, 10)
                 expectation.fulfill()
             }
@@ -479,7 +480,7 @@ class MovieTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get movies stats")
         traktManager.getMovieStatistics(movieID: "tron-legacy-2010") { result in
-            if case .success(let movieStats) = result {
+            if case let .success(movieStats) = result {
                 XCTAssertEqual(movieStats.comments, 36)
                 XCTAssertEqual(movieStats.lists, 4561)
                 XCTAssertEqual(movieStats.votes, 7866)
@@ -507,7 +508,7 @@ class MovieTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get users watching a movie")
         traktManager.getUsersWatchingMovie(movieID: "tron-legacy-2010") { result in
-            if case .success(let users) = result {
+            if case let .success(users) = result {
                 XCTAssertEqual(users.count, 2)
                 expectation.fulfill()
             }

@@ -1,9 +1,9 @@
 //
-//  TraktUser.swift
-//  TraktKit
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 4/13/16.
-//  Copyright © 2016 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
 import Foundation
@@ -17,7 +17,7 @@ public struct User: Codable, Hashable {
     public let isVIP: Bool?
     public let isVIPEP: Bool?
     public let ids: IDs
-    
+
     // Full
     public let joinedAt: Date?
     public let location: String?
@@ -25,11 +25,11 @@ public struct User: Codable, Hashable {
     public let gender: String?
     public let age: Int?
     public let images: Images?
-    
+
     // VIP
     public let vipOG: Bool?
     public let vipYears: Int?
-    
+
     enum CodingKeys: String, CodingKey {
         case username
         case isPrivate = "private"

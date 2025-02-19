@@ -1,14 +1,14 @@
 //
-//  Lists.swift
-//  TraktKit
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 3/29/18.
-//  Copyright © 2018 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
 import Foundation
 
-extension TraktManager {
+public extension TraktManager {
 
     /**
      Returns all lists with the most likes and comments over the last 7 days.
@@ -16,17 +16,20 @@ extension TraktManager {
      📄 Pagination
      */
     @discardableResult
-    public func getTrendingLists(completion: @escaping ObjectsCompletionHandler<TraktTrendingList>) -> URLSessionDataTaskProtocol? {
-        guard
-            let request = mutableRequest(forPath: "lists/trending",
-                                         withQuery: [:],
-                                         isAuthorized: false,
-                                         withHTTPMethod: .GET) else {
-                                            completion(.error(error: nil))
-                                            return nil
+    func getTrendingLists(completion: @escaping ObjectsCompletionHandler<TraktTrendingList>) -> URLSessionDataTaskProtocol? {
+        guard let request = mutableRequest(
+            forPath: "lists/trending",
+            withQuery: [:],
+            isAuthorized: false,
+            withHTTPMethod: .GET
+        ) else {
+            completion(.error(error: nil))
+            return nil
         }
-        return performRequest(request: request,
-                              completion: completion)
+        return performRequest(
+            request: request,
+            completion: completion
+        )
     }
 
     /**
@@ -35,16 +38,19 @@ extension TraktManager {
      📄 Pagination
      */
     @discardableResult
-    public func getPopularLists(completion: @escaping ObjectsCompletionHandler<TraktTrendingList>) -> URLSessionDataTaskProtocol? {
-        guard
-            let request = mutableRequest(forPath: "lists/popular",
-                                         withQuery: [:],
-                                         isAuthorized: false,
-                                         withHTTPMethod: .GET) else {
-                                            completion(.error(error: nil))
-                                            return nil
+    func getPopularLists(completion: @escaping ObjectsCompletionHandler<TraktTrendingList>) -> URLSessionDataTaskProtocol? {
+        guard let request = mutableRequest(
+            forPath: "lists/popular",
+            withQuery: [:],
+            isAuthorized: false,
+            withHTTPMethod: .GET
+        ) else {
+            completion(.error(error: nil))
+            return nil
         }
-        return performRequest(request: request,
-                              completion: completion)
+        return performRequest(
+            request: request,
+            completion: completion
+        )
     }
 }

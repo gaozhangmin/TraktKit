@@ -1,13 +1,13 @@
 //
-//  PeopleTests.swift
-//  TraktKitTests
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 6/15/17.
-//  Copyright © 2017 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
-import XCTest
 @testable import TraktKit
+import XCTest
 
 class PeopleTests: XCTestCase {
 
@@ -28,7 +28,7 @@ class PeopleTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get minimal details on a person")
         traktManager.getPersonDetails(personID: "bryan-cranston", extended: [.Min]) { result in
-            if case .success(let person) = result {
+            if case let .success(person) = result {
                 XCTAssertEqual(person.name, "Bryan Cranston")
                 expectation.fulfill()
             }
@@ -49,7 +49,7 @@ class PeopleTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get full details on a person")
         traktManager.getPersonDetails(personID: "bryan-cranston", extended: [.Full]) { result in
-            if case .success(let person) = result {
+            if case let .success(person) = result {
                 XCTAssertEqual(person.name, "Bryan Cranston")
                 expectation.fulfill()
             }
@@ -63,7 +63,6 @@ class PeopleTests: XCTestCase {
         default:
             break
         }
-
     }
 
     // MARK: - Movies
@@ -73,7 +72,7 @@ class PeopleTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get movie credits for person")
         traktManager.getMovieCredits(personID: "bryan-cranston", extended: [.Min]) { result in
-            if case .success(let movieCredits) = result {
+            if case let .success(movieCredits) = result {
                 XCTAssertEqual(movieCredits.writers?.count, 2)
                 XCTAssertEqual(movieCredits.directors?.count, 1)
                 XCTAssertEqual(movieCredits.cast?.count, 69)
@@ -98,7 +97,7 @@ class PeopleTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get show credits for person")
         traktManager.getShowCredits(personID: "bryan-cranston", extended: [.Min]) { result in
-            if case .success(let showCredits) = result {
+            if case let .success(showCredits) = result {
                 XCTAssertEqual(showCredits.producers?.count, 4)
                 XCTAssertEqual(showCredits.cast?.count, 54)
                 expectation.fulfill()
@@ -122,7 +121,7 @@ class PeopleTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get lists containing person")
         traktManager.getListsContainingPerson(personId: "bryan-cranston") { result in
-            if case .success(let lists) = result {
+            if case let .success(lists) = result {
                 XCTAssertEqual(lists.count, 1)
                 expectation.fulfill()
             }

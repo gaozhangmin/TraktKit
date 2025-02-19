@@ -1,85 +1,105 @@
 //
-//  Recommendations.swift
-//  TraktKit
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 11/14/15.
-//  Copyright © 2015 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
 import Foundation
 
-extension TraktManager {
-    
+public extension TraktManager {
+
     // MARK: - Public
-    
+
     /**
      Personalized movie recommendations for a user. Results returned with the top recommendation first. By default, `10` results are returned. You can send a limit to get up to `100` results per page.
-     
+
      🔒 OAuth: Required
      ✨ Extended Info
      */
     @discardableResult
-    public func getRecommendedMovies(completion: @escaping ObjectsCompletionHandler<TraktMovie>) -> URLSessionDataTaskProtocol? {
-        return getRecommendations(.Movies, completion: completion)
+    func getRecommendedMovies(completion: @escaping ObjectsCompletionHandler<TraktMovie>) -> URLSessionDataTaskProtocol? {
+        getRecommendations(.Movies, completion: completion)
     }
-    
+
     /**
      Hide a movie from getting recommended anymore.
-     
+
      🔒 OAuth: Required
      */
     @discardableResult
-    public func hideRecommendedMovie<T: CustomStringConvertible>(movieID id: T, completion: @escaping SuccessCompletionHandler) -> URLSessionDataTaskProtocol? {
-        return hideRecommendation(type: .Movies, id: id, completion: completion)
+    func hideRecommendedMovie<T: CustomStringConvertible>(
+        movieID id: T,
+        completion: @escaping SuccessCompletionHandler
+    ) -> URLSessionDataTaskProtocol? {
+        hideRecommendation(type: .Movies, id: id, completion: completion)
     }
-    
+
     /**
      Personalized show recommendations for a user. Results returned with the top recommendation first.
-     
+
      🔒 OAuth: Required
      */
     @discardableResult
-    public func getRecommendedShows(completion: @escaping ObjectsCompletionHandler<TraktShow>) -> URLSessionDataTaskProtocol? {
-        return getRecommendations(.Shows, completion: completion)
+    func getRecommendedShows(completion: @escaping ObjectsCompletionHandler<TraktShow>) -> URLSessionDataTaskProtocol? {
+        getRecommendations(.Shows, completion: completion)
     }
-    
+
     /**
      Hide a show from getting recommended anymore.
-     
+
      🔒 OAuth: Required
      */
     @discardableResult
-    public func hideRecommendedShow<T: CustomStringConvertible>(showID id: T, completion: @escaping SuccessCompletionHandler) -> URLSessionDataTaskProtocol? {
-        return hideRecommendation(type: .Shows, id: id, completion: completion)
+    func hideRecommendedShow<T: CustomStringConvertible>(
+        showID id: T,
+        completion: @escaping SuccessCompletionHandler
+    ) -> URLSessionDataTaskProtocol? {
+        hideRecommendation(type: .Shows, id: id, completion: completion)
     }
-    
+
     // MARK: - Private
-    
+
     @discardableResult
-    private func getRecommendations<T>(_ type: WatchedType, completion: @escaping ObjectsCompletionHandler<T>) -> URLSessionDataTaskProtocol? {
-        guard let request = mutableRequest(forPath: "recommendations/\(type)",
+    private func getRecommendations<T>(
+        _ type: WatchedType,
+        completion: @escaping ObjectsCompletionHandler<T>
+    ) -> URLSessionDataTaskProtocol? {
+        guard let request = mutableRequest(
+            forPath: "recommendations/\(type)",
             withQuery: [:],
             isAuthorized: true,
-            withHTTPMethod: .GET) else {
-                completion(.error(error: nil))
-                return nil
+            withHTTPMethod: .GET
+        ) else {
+            completion(.error(error: nil))
+            return nil
         }
-        
-        return performRequest(request: request,
-                              completion: completion)
+
+        return performRequest(
+            request: request,
+            completion: completion
+        )
     }
-    
+
     @discardableResult
-    private func hideRecommendation<T: CustomStringConvertible>(type: WatchedType, id: T, completion: @escaping SuccessCompletionHandler) -> URLSessionDataTaskProtocol? {
-        guard let request = mutableRequest(forPath: "recommendations/\(type)/\(id)",
+    private func hideRecommendation<T: CustomStringConvertible>(
+        type: WatchedType,
+        id: T,
+        completion: @escaping SuccessCompletionHandler
+    ) -> URLSessionDataTaskProtocol? {
+        guard let request = mutableRequest(
+            forPath: "recommendations/\(type)/\(id)",
             withQuery: [:],
             isAuthorized: true,
-            withHTTPMethod: .DELETE) else {
-                completion(.fail)
-                return nil
+            withHTTPMethod: .DELETE
+        ) else {
+            completion(.fail)
+            return nil
         }
-        return performRequest(request: request,
-                              completion: completion)
+        return performRequest(
+            request: request,
+            completion: completion
+        )
     }
 }
-

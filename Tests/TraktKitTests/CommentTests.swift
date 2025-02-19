@@ -1,14 +1,14 @@
 //
-//  CommentTests.swift
-//  TraktKitTests
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 6/13/17.
-//  Copyright © 2017 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
-import XCTest
 import Foundation
 @testable import TraktKit
+import XCTest
 
 class CommentTests: XCTestCase {
 
@@ -52,7 +52,7 @@ class CommentTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get a comment")
         traktManager.getComment(commentID: "417") { result in
-            if case .success(let comment) = result {
+            if case let .success(comment) = result {
                 XCTAssertEqual(comment.likes, 0)
                 XCTAssertEqual(comment.userRating, 8)
                 XCTAssertEqual(comment.spoiler, false)
@@ -74,11 +74,12 @@ class CommentTests: XCTestCase {
     func test_update_a_comment() {
         session.nextData = jsonData(named: "test_update_a_comment")
 
-        let newComment = "Agreed, this show is awesome. AMC in general has awesome shows and I can't wait to see what they come up with next."
+        let newComment =
+            "Agreed, this show is awesome. AMC in general has awesome shows and I can't wait to see what they come up with next."
 
         let expectation = XCTestExpectation(description: "Update a comment")
         try! traktManager.updateComment(commentID: "417", newComment: newComment) { result in
-            if case .success(let comment) = result {
+            if case let .success(comment) = result {
                 XCTAssertEqual(comment.comment, newComment)
                 expectation.fulfill()
             }
@@ -121,7 +122,7 @@ class CommentTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get replies for comment")
         traktManager.getReplies(commentID: "417") { result in
-            if case .success(let replies) = result {
+            if case let .success(replies) = result {
                 XCTAssertEqual(replies.count, 1)
                 expectation.fulfill()
             }
@@ -144,7 +145,7 @@ class CommentTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get replies for comment")
         try! traktManager.postReply(commentID: "417", comment: reply) { result in
-            if case .success(let postedReply) = result {
+            if case let .success(postedReply) = result {
                 XCTAssertEqual(postedReply.comment, reply)
                 expectation.fulfill()
             }
@@ -167,7 +168,7 @@ class CommentTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get attached media item")
         traktManager.getAttachedMediaItem(commentID: "417") { result in
-            if case .success(let mediaItem) = result {
+            if case let .success(mediaItem) = result {
                 XCTAssertNotNil(mediaItem.show)
                 expectation.fulfill()
             }
@@ -190,7 +191,7 @@ class CommentTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get users who liked comment")
         traktManager.getUsersWhoLikedComment(commentID: "417") { result in
-            if case .success(let users) = result {
+            if case let .success(users) = result {
                 XCTAssertEqual(users.count, 2)
                 expectation.fulfill()
             }
@@ -255,7 +256,7 @@ class CommentTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get trending comments")
         traktManager.getTrendingComments(commentType: .all, mediaType: .All, includeReplies: true) { result in
-            if case .success(let trendingComments) = result {
+            if case let .success(trendingComments) = result {
                 XCTAssertEqual(trendingComments.count, 5)
                 expectation.fulfill()
             }
@@ -278,7 +279,7 @@ class CommentTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get recently created comments")
         traktManager.getRecentComments(commentType: .all, mediaType: .All, includeReplies: true) { result in
-            if case .success(let recentComments) = result {
+            if case let .success(recentComments) = result {
                 XCTAssertEqual(recentComments.count, 5)
                 expectation.fulfill()
             }
@@ -301,7 +302,7 @@ class CommentTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get recently updated comments")
         traktManager.getRecentlyUpdatedComments(commentType: .all, mediaType: .All, includeReplies: true) { result in
-            if case .success(let recentComments) = result {
+            if case let .success(recentComments) = result {
                 XCTAssertEqual(recentComments.count, 5)
                 expectation.fulfill()
             }

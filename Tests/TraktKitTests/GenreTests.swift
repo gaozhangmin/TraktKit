@@ -1,14 +1,14 @@
 //
-//  GenreTests.swift
-//  TraktKitTests
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 3/24/18.
-//  Copyright © 2018 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
-import XCTest
 import Foundation
 @testable import TraktKit
+import XCTest
 
 class GenreTests: XCTestCase {
 
@@ -27,7 +27,7 @@ class GenreTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get movie genres")
         traktManager.listGenres(type: .Movies) { result in
-            if case .success(let genres) = result {
+            if case let .success(genres) = result {
                 XCTAssertEqual(genres.count, 33)
                 expectation.fulfill()
             }

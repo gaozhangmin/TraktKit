@@ -1,21 +1,21 @@
 //
-//  TraktEpisode.swift
-//  TraktKit
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 4/13/16.
-//  Copyright © 2016 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
 import Foundation
 
 public struct TraktEpisode: Codable, Hashable {
-    
+
     // Extended: Min
     public let season: Int
     public let number: Int
     public let title: String?
     public let ids: EpisodeId
-    
+
     // Extended: Full
     public let overview: String?
     public let rating: Double?
@@ -26,13 +26,13 @@ public struct TraktEpisode: Codable, Hashable {
     public let absoluteNumber: Int?
     public let runtime: Int?
     public let commentCount: Int?
-    
+
     enum CodingKeys: String, CodingKey {
         case season
         case number
         case title
         case ids
-        
+
         case overview
         case rating
         case votes
@@ -43,8 +43,22 @@ public struct TraktEpisode: Codable, Hashable {
         case runtime
         case commentCount = "comment_count"
     }
-    
-    public init(season: Int, number: Int, title: String? = nil, ids: EpisodeId, overview: String? = nil, rating: Double? = nil, votes: Int? = nil, firstAired: Date? = nil, updatedAt: Date? = nil, availableTranslations: [String]? = nil, absoluteNumber: Int? = nil, runtime: Int? = nil, commentCount: Int? = nil) {
+
+    public init(
+        season: Int,
+        number: Int,
+        title: String? = nil,
+        ids: EpisodeId,
+        overview: String? = nil,
+        rating: Double? = nil,
+        votes: Int? = nil,
+        firstAired: Date? = nil,
+        updatedAt: Date? = nil,
+        availableTranslations: [String]? = nil,
+        absoluteNumber: Int? = nil,
+        runtime: Int? = nil,
+        commentCount: Int? = nil
+    ) {
         self.season = season
         self.number = number
         self.title = title

@@ -1,98 +1,147 @@
 //
-//  Comments.swift
-//  TraktKit
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 11/15/15.
-//  Copyright © 2015 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
 import Foundation
 
-extension TraktManager {
-    
+public extension TraktManager {
+
     // MARK: - Comments
-    
+
     /**
      Add a new comment to a movie, show, season, episode, or list. Make sure to allow and encourage spoilers to be indicated in your app and follow the rules listed above.
-     
+
      🔒 OAuth: Required
      */
     @discardableResult
-    public func postComment(movie: SyncId? = nil, show: SyncId? = nil, season: SyncId? = nil, episode: SyncId? = nil, list: SyncId? = nil, comment: String, isSpoiler spoiler: Bool? = nil, completion: @escaping SuccessCompletionHandler) throws -> URLSessionDataTaskProtocol? {
-        let body = TraktCommentBody(movie: movie, show: show, season: season, episode: episode, list: list, comment: comment, spoiler: spoiler)
+    func postComment(
+        movie: SyncTmdbId? = nil,
+        show: SyncTmdbId? = nil,
+        season: SyncTmdbId? = nil,
+        episode: SyncTmdbId? = nil,
+        list: SyncTmdbId? = nil,
+        comment: String,
+        isSpoiler spoiler: Bool? = nil,
+        completion: @escaping SuccessCompletionHandler
+    ) throws -> URLSessionDataTaskProtocol? {
+        let body = TraktCommentBody(
+            movie: movie,
+            show: show,
+            season: season,
+            episode: episode,
+            list: list,
+            comment: comment,
+            spoiler: spoiler
+        )
         guard let request = post("comments", body: body) else { return nil }
         return performRequest(request: request, completion: completion)
     }
-    
+
     /**
      Returns a single comment and indicates how many replies it has. Use **GET** `/comments/:id/replies` to get the actual replies.
      */
     @discardableResult
-    public func getComment<T: CustomStringConvertible>(commentID id: T, completion: @escaping ObjectCompletionHandler<Comment>) -> URLSessionDataTaskProtocol? {
-        guard let request = mutableRequest(forPath: "comments/\(id)",
-                                           withQuery: [:],
-                                           isAuthorized: false,
-                                           withHTTPMethod: .GET) else { return nil }
-        return performRequest(request: request,
-                              completion: completion)
+    func getComment<T: CustomStringConvertible>(
+        commentID id: T,
+        completion: @escaping ObjectCompletionHandler<Comment>
+    ) -> URLSessionDataTaskProtocol? {
+        guard let request = mutableRequest(
+            forPath: "comments/\(id)",
+            withQuery: [:],
+            isAuthorized: false,
+            withHTTPMethod: .GET
+        ) else { return nil }
+        return performRequest(
+            request: request,
+            completion: completion
+        )
     }
-    
+
     /**
      Update a single comment created within the last hour. The OAuth user must match the author of the comment in order to update it.
-     
+
      🔒 OAuth: Required
      */
     @discardableResult
-    public func updateComment<T: CustomStringConvertible>(commentID id: T, newComment comment: String, isSpoiler spoiler: Bool? = nil, completion: @escaping ObjectCompletionHandler<Comment>) throws -> URLSessionDataTaskProtocol? {
+    func updateComment<T: CustomStringConvertible>(
+        commentID id: T,
+        newComment comment: String,
+        isSpoiler spoiler: Bool? = nil,
+        completion: @escaping ObjectCompletionHandler<Comment>
+    ) throws -> URLSessionDataTaskProtocol? {
         let body = TraktCommentBody(comment: comment, spoiler: spoiler)
-        guard var request = mutableRequest(forPath: "comments/\(id)",
-                                           withQuery: [:],
-                                           isAuthorized: true,
-                                           withHTTPMethod: .PUT) else { return nil }
+        guard var request = mutableRequest(
+            forPath: "comments/\(id)",
+            withQuery: [:],
+            isAuthorized: true,
+            withHTTPMethod: .PUT
+        ) else { return nil }
         request.httpBody = try jsonEncoder.encode(body)
-        return performRequest(request: request,
-                              completion: completion)
+        return performRequest(
+            request: request,
+            completion: completion
+        )
     }
-    
+
     /**
      Delete a single comment created within the last hour. This also effectively removes any replies this comment has. The OAuth user must match the author of the comment in order to delete it.
-     
+
      🔒 OAuth: Required
      */
     @discardableResult
-    public func deleteComment<T: CustomStringConvertible>(commentID id: T, completion: @escaping SuccessCompletionHandler) -> URLSessionDataTaskProtocol? {
-        guard
-            let request = mutableRequest(forPath: "comments/\(id)",
-                                         withQuery: [:],
-                                         isAuthorized: true,
-                                         withHTTPMethod: .DELETE) else { return nil }
+    func deleteComment<T: CustomStringConvertible>(
+        commentID id: T,
+        completion: @escaping SuccessCompletionHandler
+    ) -> URLSessionDataTaskProtocol? {
+        guard let request = mutableRequest(
+            forPath: "comments/\(id)",
+            withQuery: [:],
+            isAuthorized: true,
+            withHTTPMethod: .DELETE
+        ) else { return nil }
         return performRequest(request: request, completion: completion)
     }
-    
+
     // MARK: - Replies
-    
+
     /**
      Returns all replies for a comment. It is possible these replies could have replies themselves, so in that case you would just call **GET** `/comments/:id/replies` again with the new comment `id`.
-     
+
      📄 Pagination
      */
     @discardableResult
-    public func getReplies<T: CustomStringConvertible>(commentID id: T, completion: @escaping ObjectsCompletionHandler<Comment>) -> URLSessionDataTaskProtocol? {
-        guard let request = mutableRequest(forPath: "comments/\(id)/replies",
-                                           withQuery: [:],
-                                           isAuthorized: false,
-                                           withHTTPMethod: .GET) else { return nil }
-        return performRequest(request: request,
-                              completion: completion)
+    func getReplies<T: CustomStringConvertible>(
+        commentID id: T,
+        completion: @escaping ObjectsCompletionHandler<Comment>
+    ) -> URLSessionDataTaskProtocol? {
+        guard let request = mutableRequest(
+            forPath: "comments/\(id)/replies",
+            withQuery: [:],
+            isAuthorized: false,
+            withHTTPMethod: .GET
+        ) else { return nil }
+        return performRequest(
+            request: request,
+            completion: completion
+        )
     }
-    
+
     /**
      Add a new reply to an existing comment. Make sure to allow and encourage spoilers to be indicated in your app and follow the rules listed above.
-     
+
      🔒 OAuth: Required
      */
     @discardableResult
-    public func postReply<T: CustomStringConvertible>(commentID id: T, comment: String, isSpoiler spoiler: Bool? = nil, completion: @escaping ObjectCompletionHandler<Comment>) throws -> URLSessionDataTaskProtocol? {
+    func postReply<T: CustomStringConvertible>(
+        commentID id: T,
+        comment: String,
+        isSpoiler spoiler: Bool? = nil,
+        completion: @escaping ObjectCompletionHandler<Comment>
+    ) throws -> URLSessionDataTaskProtocol? {
         let body = TraktCommentBody(comment: comment, spoiler: spoiler)
         guard let request = post("comments/\(id)/replies", body: body) else { return nil }
         return performRequest(request: request, completion: completion)
@@ -106,13 +155,20 @@ extension TraktManager {
      📄 Pagination
      */
     @discardableResult
-    public func getAttachedMediaItem<T: CustomStringConvertible>(commentID id: T, completion: @escaping ObjectCompletionHandler<TraktAttachedMediaItem>) -> URLSessionDataTaskProtocol? {
-        guard let request = mutableRequest(forPath: "comments/\(id)/item",
+    func getAttachedMediaItem<T: CustomStringConvertible>(
+        commentID id: T,
+        completion: @escaping ObjectCompletionHandler<TraktAttachedMediaItem>
+    ) -> URLSessionDataTaskProtocol? {
+        guard let request = mutableRequest(
+            forPath: "comments/\(id)/item",
             withQuery: [:],
             isAuthorized: true,
-            withHTTPMethod: .POST) else { return nil }
-        return performRequest(request: request,
-                              completion: completion)
+            withHTTPMethod: .POST
+        ) else { return nil }
+        return performRequest(
+            request: request,
+            completion: completion
+        )
     }
 
     // MARK: - Likes
@@ -123,45 +179,66 @@ extension TraktManager {
      ✨ Extended Info
      */
     @discardableResult
-    public func getUsersWhoLikedComment<T: CustomStringConvertible>(commentID id: T, completion: @escaping ObjectsCompletionHandler<TraktCommentLikedUser>) -> URLSessionDataTaskProtocol? {
-        guard let request = mutableRequest(forPath: "comments/\(id)/likes",
+    func getUsersWhoLikedComment<T: CustomStringConvertible>(
+        commentID id: T,
+        completion: @escaping ObjectsCompletionHandler<TraktCommentLikedUser>
+    ) -> URLSessionDataTaskProtocol? {
+        guard let request = mutableRequest(
+            forPath: "comments/\(id)/likes",
             withQuery: [:],
             isAuthorized: true,
-            withHTTPMethod: .GET) else { return nil }
-        return performRequest(request: request,
-                              completion: completion)
+            withHTTPMethod: .GET
+        ) else { return nil }
+        return performRequest(
+            request: request,
+            completion: completion
+        )
     }
 
     // MARK: - Like
-    
+
     /**
      Votes help determine popular comments. Only one like is allowed per comment per user.
-     
+
      🔒 OAuth: Required
      */
     @discardableResult
-    public func likeComment<T: CustomStringConvertible>(commentID id: T, completion: @escaping SuccessCompletionHandler) -> URLSessionDataTaskProtocol? {
-        guard let request = mutableRequest(forPath: "comments/\(id)/like",
-                                           withQuery: [:],
-                                           isAuthorized: false,
-                                           withHTTPMethod: .POST) else { return nil }
-        return performRequest(request: request,
-                              completion: completion)
+    func likeComment<T: CustomStringConvertible>(
+        commentID id: T,
+        completion: @escaping SuccessCompletionHandler
+    ) -> URLSessionDataTaskProtocol? {
+        guard let request = mutableRequest(
+            forPath: "comments/\(id)/like",
+            withQuery: [:],
+            isAuthorized: false,
+            withHTTPMethod: .POST
+        ) else { return nil }
+        return performRequest(
+            request: request,
+            completion: completion
+        )
     }
-    
+
     /**
      Remove a like on a comment.
-     
+
      🔒 OAuth: Required
      */
     @discardableResult
-    public func removeLikeOnComment<T: CustomStringConvertible>(commentID id: T, completion: @escaping SuccessCompletionHandler) -> URLSessionDataTaskProtocol? {
-        guard let request = mutableRequest(forPath: "comments/\(id)/like",
-                                           withQuery: [:],
-                                           isAuthorized: false,
-                                           withHTTPMethod: .DELETE) else { return nil }
-        return performRequest(request: request,
-                              completion: completion)
+    func removeLikeOnComment<T: CustomStringConvertible>(
+        commentID id: T,
+        completion: @escaping SuccessCompletionHandler
+    ) -> URLSessionDataTaskProtocol? {
+        guard let request = mutableRequest(
+            forPath: "comments/\(id)/like",
+            withQuery: [:],
+            isAuthorized: false,
+            withHTTPMethod: .DELETE
+        ) else { return nil }
+        return performRequest(
+            request: request,
+            completion: completion
+        )
     }
 
     // MARK: - Trending
@@ -173,13 +250,22 @@ extension TraktManager {
      ✨ Extended
      */
     @discardableResult
-    public func getTrendingComments(commentType: CommentType, mediaType: Type2, includeReplies: Bool, completion: @escaping ObjectsCompletionHandler<TraktTrendingComment>) -> URLSessionDataTaskProtocol? {
-        guard let request = mutableRequest(forPath: "comments/trending/\(commentType.rawValue)/\(mediaType.rawValue)",
+    func getTrendingComments(
+        commentType: CommentType,
+        mediaType: Type2,
+        includeReplies: Bool,
+        completion: @escaping ObjectsCompletionHandler<TraktTrendingComment>
+    ) -> URLSessionDataTaskProtocol? {
+        guard let request = mutableRequest(
+            forPath: "comments/trending/\(commentType.rawValue)/\(mediaType.rawValue)",
             withQuery: ["include_replies": "\(includeReplies)"],
             isAuthorized: false,
-            withHTTPMethod: .GET) else { return nil }
-        return performRequest(request: request,
-                              completion: completion)
+            withHTTPMethod: .GET
+        ) else { return nil }
+        return performRequest(
+            request: request,
+            completion: completion
+        )
     }
 
     // MARK: - Recent
@@ -191,13 +277,22 @@ extension TraktManager {
      ✨ Extended
      */
     @discardableResult
-    public func getRecentComments(commentType: CommentType, mediaType: Type2, includeReplies: Bool, completion: @escaping ObjectsCompletionHandler<TraktTrendingComment>) -> URLSessionDataTaskProtocol? {
-        guard let request = mutableRequest(forPath: "comments/recent/\(commentType.rawValue)/\(mediaType.rawValue)",
+    func getRecentComments(
+        commentType: CommentType,
+        mediaType: Type2,
+        includeReplies: Bool,
+        completion: @escaping ObjectsCompletionHandler<TraktTrendingComment>
+    ) -> URLSessionDataTaskProtocol? {
+        guard let request = mutableRequest(
+            forPath: "comments/recent/\(commentType.rawValue)/\(mediaType.rawValue)",
             withQuery: ["include_replies": "\(includeReplies)"],
             isAuthorized: false,
-            withHTTPMethod: .GET) else { return nil }
-        return performRequest(request: request,
-                              completion: completion)
+            withHTTPMethod: .GET
+        ) else { return nil }
+        return performRequest(
+            request: request,
+            completion: completion
+        )
     }
 
     // MARK: - Updates
@@ -209,12 +304,21 @@ extension TraktManager {
      ✨ Extended
      */
     @discardableResult
-    public func getRecentlyUpdatedComments(commentType: CommentType, mediaType: Type2, includeReplies: Bool, completion: @escaping ObjectsCompletionHandler<TraktTrendingComment>) -> URLSessionDataTaskProtocol? {
-        guard let request = mutableRequest(forPath: "comments/updates/\(commentType.rawValue)/\(mediaType.rawValue)",
+    func getRecentlyUpdatedComments(
+        commentType: CommentType,
+        mediaType: Type2,
+        includeReplies: Bool,
+        completion: @escaping ObjectsCompletionHandler<TraktTrendingComment>
+    ) -> URLSessionDataTaskProtocol? {
+        guard let request = mutableRequest(
+            forPath: "comments/updates/\(commentType.rawValue)/\(mediaType.rawValue)",
             withQuery: ["include_replies": "\(includeReplies)"],
             isAuthorized: false,
-            withHTTPMethod: .GET) else { return nil }
-        return performRequest(request: request,
-                              completion: completion)
+            withHTTPMethod: .GET
+        ) else { return nil }
+        return performRequest(
+            request: request,
+            completion: completion
+        )
     }
 }

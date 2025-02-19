@@ -1,16 +1,16 @@
 //
-//  ScrobbleTests.swift
-//  TraktKitTests
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 3/29/18.
-//  Copyright © 2018 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
-import XCTest
 @testable import TraktKit
+import XCTest
 
 class ScrobbleTests: XCTestCase {
-    
+
     let session = MockURLSession()
     lazy var traktManager = TestTraktManager(session: session)
 
@@ -26,11 +26,11 @@ class ScrobbleTests: XCTestCase {
     func test_start_watching_in_media_center() {
         session.nextData = jsonData(named: "test_start_watching_in_media_center")
         session.nextStatusCode = StatusCodes.SuccessNewResourceCreated
-        
+
         let expectation = XCTestExpectation(description: "Start watching in media center")
         let scrobble = TraktScrobble(movie: SyncId(trakt: 12345), progress: 1.25)
         try! traktManager.scrobbleStart(scrobble) { result in
-            if case .success(let response) = result {
+            if case let .success(response) = result {
                 XCTAssertEqual(response.action, "start")
                 XCTAssertEqual(response.progress, 1.25)
                 XCTAssertNotNil(response.movie)
@@ -57,7 +57,7 @@ class ScrobbleTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Pause watching in media center")
         let scrobble = TraktScrobble(movie: SyncId(trakt: 12345), progress: 75)
         try! traktManager.scrobblePause(scrobble) { result in
-            if case .success(let response) = result {
+            if case let .success(response) = result {
                 XCTAssertEqual(response.action, "pause")
                 XCTAssertEqual(response.progress, 75)
                 XCTAssertNotNil(response.movie)
@@ -84,7 +84,7 @@ class ScrobbleTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Stop watching in media center")
         let scrobble = TraktScrobble(movie: SyncId(trakt: 12345), progress: 99.9)
         try! traktManager.scrobbleStop(scrobble) { result in
-            if case .success(let response) = result {
+            if case let .success(response) = result {
                 XCTAssertEqual(response.action, "scrobble")
                 XCTAssertEqual(response.progress, 99.9)
                 XCTAssertNotNil(response.movie)

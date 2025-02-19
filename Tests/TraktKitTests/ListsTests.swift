@@ -1,13 +1,13 @@
 //
-//  ListsTests.swift
-//  TraktKitTests
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 3/26/18.
-//  Copyright © 2018 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
-import XCTest
 @testable import TraktKit
+import XCTest
 
 class ListsTests: XCTestCase {
 
@@ -26,7 +26,7 @@ class ListsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get trending lists")
         traktManager.getTrendingLists { result in
-            if case .success(let lists) = result {
+            if case let .success(lists) = result {
                 XCTAssertEqual(lists.count, 2)
                 expectation.fulfill()
             }
@@ -47,7 +47,7 @@ class ListsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get popular lists")
         traktManager.getPopularLists { result in
-            if case .success(let lists) = result {
+            if case let .success(lists) = result {
                 XCTAssertEqual(lists.count, 2)
                 expectation.fulfill()
             }
@@ -62,5 +62,4 @@ class ListsTests: XCTestCase {
             break
         }
     }
-    
 }

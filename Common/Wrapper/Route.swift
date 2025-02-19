@@ -1,9 +1,9 @@
 //
-//  Route.swift
-//  TraktKit
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maxamilian Litteral on 6/14/21.
-//  Copyright © 2021 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
 import Foundation
@@ -18,7 +18,7 @@ public class Route<T: Codable> {
     private var extended: [ExtendedType] = []
     private var _page: Int?
     private var _limit: Int?
-    
+
     private var filters = [FilterType]()
     private var searchType: SearchType?
     private var searchQuery: String?
@@ -38,15 +38,15 @@ public class Route<T: Codable> {
         if let limit = _limit {
             query["limit"] = limit.description
         }
-        
+
         if let searchType {
             query["type"] = searchType.rawValue
         }
-        
+
         if let searchQuery {
             query["query"] = searchQuery
         }
-        
+
         // Filters
         if filters.isEmpty == false {
             for (key, value) in (filters.map { $0.value() }) {
@@ -54,13 +54,21 @@ public class Route<T: Codable> {
             }
         }
 
-        return traktManager.mutableRequest(forPath: path,
-                                           withQuery: query,
-                                           isAuthorized: requiresAuthentication,
-                                           withHTTPMethod: method)!
+        return traktManager.mutableRequest(
+            forPath: path,
+            withQuery: query,
+            isAuthorized: requiresAuthentication,
+            withHTTPMethod: method
+        )!
     }
 
-    public init(path: String, method: Method, requiresAuthentication: Bool = false, traktManager: TraktManager, resultType: T.Type = T.self) {
+    public init(
+        path: String,
+        method: Method,
+        requiresAuthentication: Bool = false,
+        traktManager: TraktManager,
+        resultType: T.Type = T.self
+    ) {
         self.path = path
         self.method = method
         self.requiresAuthentication = requiresAuthentication
@@ -72,7 +80,7 @@ public class Route<T: Codable> {
         self.extended = extended
         return self
     }
-    
+
     // MARK: - Pagination
 
     public func page(_ page: Int?) -> Self {
@@ -84,26 +92,26 @@ public class Route<T: Codable> {
         self._limit = limit
         return self
     }
-    
+
     // MARK: - Filters
-    
+
     public func filter(_ filter: TraktManager.Filter) -> Self {
         filters.append(filter)
         return self
     }
-    
+
     public func type(_ type: SearchType?) -> Self {
         searchType = type
         return self
     }
-    
+
     // MARK: - Search
-    
+
     public func query(_ query: String?) -> Self {
         searchQuery = query
         return self
     }
-    
+
     // MARK: - Perform
 
     public func perform() async throws -> T {

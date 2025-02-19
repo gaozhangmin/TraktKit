@@ -1,13 +1,13 @@
 //
-//  SearchTests.swift
-//  TraktKitTests
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 3/29/18.
-//  Copyright © 2018 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
-import XCTest
 @testable import TraktKit
+import XCTest
 
 class SearchTests: XCTestCase {
 
@@ -28,7 +28,7 @@ class SearchTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Search")
         traktManager.search(query: "tron", types: [.movie, .show, .episode, .person, .list]) { result in
-            if case .success(let searchResults) = result {
+            if case let .success(searchResults) = result {
                 XCTAssertEqual(searchResults.count, 5)
                 expectation.fulfill()
             }
@@ -51,7 +51,7 @@ class SearchTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Lookup Id")
         traktManager.lookup(id: .IMDB(id: "tt0848228"), type: .movie) { result in
-            if case .success(let lookupResults) = result {
+            if case let .success(lookupResults) = result {
                 XCTAssertEqual(lookupResults.count, 1)
                 expectation.fulfill()
             }

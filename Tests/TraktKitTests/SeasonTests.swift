@@ -1,13 +1,13 @@
 //
-//  SeasonTests.swift
-//  TraktKitTests
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 3/28/18.
-//  Copyright © 2018 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
-import XCTest
 @testable import TraktKit
+import XCTest
 
 class SeasonTests: XCTestCase {
 
@@ -28,7 +28,7 @@ class SeasonTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get all seasons")
         traktManager.getSeasons(showID: "game-of-thrones") { result in
-            if case .success(let seasons) = result {
+            if case let .success(seasons) = result {
                 XCTAssertEqual(seasons.count, 5)
                 expectation.fulfill()
             }
@@ -49,7 +49,7 @@ class SeasonTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get all seasons and episodes")
         traktManager.getSeasons(showID: "game-of-thrones", extended: [.Episodes]) { result in
-            if case .success(let seasons) = result {
+            if case let .success(seasons) = result {
                 XCTAssertEqual(seasons.count, 6)
                 expectation.fulfill()
             }
@@ -72,7 +72,7 @@ class SeasonTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get all seasons and episodes")
         traktManager.getEpisodesForSeason(showID: "game-of-thrones", season: 1) { result in
-            if case .success(let episodes) = result {
+            if case let .success(episodes) = result {
                 XCTAssertEqual(episodes.count, 10)
                 expectation.fulfill()
             }
@@ -93,7 +93,7 @@ class SeasonTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get translated episodes")
         traktManager.getEpisodesForSeason(showID: "game-of-thrones", season: 1, translatedInto: "es") { result in
-            if case .success(let episodes) = result {
+            if case let .success(episodes) = result {
                 XCTAssertEqual(episodes.count, 10)
                 expectation.fulfill()
             }
@@ -117,7 +117,7 @@ class SeasonTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get season comments")
         traktManager.getAllSeasonComments(showID: "game-of-thrones", season: 1) { result in
-            if case .success(let comments, _, _) = result {
+            if case let .success(comments, _, _) = result {
                 XCTAssertEqual(comments.count, 1)
                 expectation.fulfill()
             }
@@ -140,7 +140,7 @@ class SeasonTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get lists containing season")
         traktManager.getListsContainingSeason(showID: "game-of-thrones", season: 1, listType: ListType.personal, sortBy: .added) { result in
-            if case .success(let lists, _, _) = result {
+            if case let .success(lists, _, _) = result {
                 XCTAssertEqual(lists.count, 1)
                 expectation.fulfill()
             }
@@ -163,7 +163,7 @@ class SeasonTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get season ratings")
         traktManager.getSeasonRatings(showID: "game-of-thrones", season: 1) { result in
-            if case .success(let ratings) = result {
+            if case let .success(ratings) = result {
                 XCTAssertEqual(ratings.rating, 9)
                 XCTAssertEqual(ratings.votes, 3)
                 XCTAssertEqual(ratings.distribution.ten, 2)
@@ -188,7 +188,7 @@ class SeasonTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get season stats")
         traktManager.getSeasonStatistics(showID: "game-of-thrones", season: 1) { result in
-            if case .success(let stats) = result {
+            if case let .success(stats) = result {
                 XCTAssertEqual(stats.watchers, 30521)
                 XCTAssertEqual(stats.plays, 37986)
                 XCTAssertEqual(stats.collectors, 12899)
@@ -217,7 +217,7 @@ class SeasonTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get users watching season")
         traktManager.getUsersWatchingSeasons(showID: "game-of-thrones", season: 1) { result in
-            if case .success(let users) = result {
+            if case let .success(users) = result {
                 XCTAssertEqual(users.count, 2)
                 expectation.fulfill()
             }
@@ -232,21 +232,23 @@ class SeasonTests: XCTestCase {
             break
         }
     }
-    
+
     // MARK: - People
-    
+
     func test_get_show_people_min() {
         session.nextData = jsonData(named: "test_get_season_cast")
-        
+
         let expectation = XCTestExpectation(description: "ShowCastAndCrew")
         traktManager.getPeopleInSeason(showID: "game-of-thrones", season: 1) { result in
-            if case .success(let castAndCrew) = result {
+            if case let .success(castAndCrew) = result {
                 XCTAssertNotNil(castAndCrew.cast)
                 XCTAssertNotNil(castAndCrew.producers)
                 XCTAssertEqual(castAndCrew.cast!.count, 20)
                 XCTAssertEqual(castAndCrew.producers!.count, 14)
-                
-                guard let actor = castAndCrew.cast?.first else { XCTFail("Cast is empty"); return }
+
+                guard let actor = castAndCrew.cast?.first else { XCTFail("Cast is empty")
+                    return
+                }
                 XCTAssertEqual(actor.person.name, "Emilia Clarke")
                 XCTAssertEqual(actor.characters, ["Daenerys Targaryen"])
             }
@@ -254,7 +256,7 @@ class SeasonTests: XCTestCase {
         }
         let result = XCTWaiter().wait(for: [expectation], timeout: 5)
         XCTAssertEqual(session.lastURL?.absoluteString, "https://api.trakt.tv/shows/game-of-thrones/seasons/1/people?extended=min")
-        
+
         switch result {
         case .timedOut:
             XCTFail("Something isn't working")

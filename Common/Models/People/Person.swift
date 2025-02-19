@@ -1,8 +1,9 @@
-//  Person.swift
-//  TraktKit
 //
-//  Created by Maximilian Litteral on 4/13/16.
-//  Copyright © 2016 Maximilian Litteral. All rights reserved.
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
 import Foundation
@@ -12,7 +13,7 @@ public struct Person: Codable, Hashable {
     // Extended: Min
     public let name: String
     public let ids: ID
-    
+
     // Extended: Full
     public let biography: String?
     public let birthday: Date?
@@ -23,14 +24,14 @@ public struct Person: Codable, Hashable {
     enum CodingKeys: String, CodingKey {
         case name
         case ids
-        
+
         case biography
         case birthday
         case death
         case birthplace
         case homepage
     }
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         name = try container.decode(String.self, forKey: CodingKeys.name)
@@ -45,5 +46,4 @@ public struct Person: Codable, Hashable {
             homepage = nil
         }
     }
-
 }

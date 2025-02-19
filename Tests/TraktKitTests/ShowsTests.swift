@@ -1,14 +1,14 @@
 //
-//  ShowsTests.swift
-//  TraktKitTests
+// Swiftfin is subject to the terms of the Mozilla Public
+// License, v2.0. If a copy of the MPL was not distributed with this
+// file, you can obtain one at https://mozilla.org/MPL/2.0/.
 //
-//  Created by Maximilian Litteral on 6/13/17.
-//  Copyright © 2017 Maximilian Litteral. All rights reserved.
+// Copyright (c) 2025 Jellyfin & Jellyfin Contributors
 //
 
-import XCTest
 import Foundation
 @testable import TraktKit
+import XCTest
 
 class ShowsTests: XCTestCase {
 
@@ -44,7 +44,7 @@ class ShowsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "TrendingShows")
         traktManager.getTrendingShows(pagination: Pagination(page: 1, limit: 10)) { result in
-            if case .success(let trendingShows, _, _) = result {
+            if case let .success(trendingShows, _, _) = result {
                 XCTAssertEqual(trendingShows.count, 10)
                 expectation.fulfill()
             }
@@ -69,7 +69,7 @@ class ShowsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "TrendingShows")
         traktManager.getTrendingShows(pagination: Pagination(page: 1, limit: 10), extended: [.Full]) { result in
-            if case .success(let trendingShows, _, _) = result {
+            if case let .success(trendingShows, _, _) = result {
                 XCTAssertEqual(trendingShows.count, 10)
                 expectation.fulfill()
             }
@@ -96,7 +96,7 @@ class ShowsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get popular shows")
         traktManager.getPopularShows(pagination: Pagination(page: 1, limit: 10)) { result in
-            if case .success(let popularShows, _, _) = result {
+            if case let .success(popularShows, _, _) = result {
                 XCTAssertEqual(popularShows.count, 10)
                 expectation.fulfill()
             }
@@ -121,7 +121,7 @@ class ShowsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get most played shows")
         traktManager.getPlayedShows(pagination: Pagination(page: 1, limit: 10)) { result in
-            if case .success(let playedShows, _, _) = result {
+            if case let .success(playedShows, _, _) = result {
                 XCTAssertEqual(playedShows.count, 10)
                 expectation.fulfill()
             }
@@ -146,7 +146,7 @@ class ShowsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get most watched shows")
         traktManager.getWatchedShows(pagination: Pagination(page: 1, limit: 10)) { result in
-            if case .success(let watchedShows, _, _) = result {
+            if case let .success(watchedShows, _, _) = result {
                 XCTAssertEqual(watchedShows.count, 10)
                 expectation.fulfill()
             }
@@ -171,7 +171,7 @@ class ShowsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get most collected shows")
         traktManager.getCollectedShows(pagination: Pagination(page: 1, limit: 10)) { result in
-            if case .success(let collectedShows, _, _) = result {
+            if case let .success(collectedShows, _, _) = result {
                 XCTAssertEqual(collectedShows.count, 10)
                 expectation.fulfill()
             }
@@ -196,7 +196,7 @@ class ShowsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get anticipated shows")
         traktManager.getAnticipatedShows(pagination: Pagination(page: 1, limit: 10)) { result in
-            if case .success(let anticipatedShows, _, _) = result {
+            if case let .success(anticipatedShows, _, _) = result {
                 XCTAssertEqual(anticipatedShows.count, 10)
                 expectation.fulfill()
             }
@@ -220,12 +220,13 @@ class ShowsTests: XCTestCase {
         session.nextData = jsonData(named: "test_get_updated_shows")
 
         let expectation = XCTestExpectation(description: "Get updated shows")
-        traktManager.getUpdatedShows(startDate: try! Date.dateFromString("2014-09-22"), pagination: Pagination(page: 1, limit: 10)) { result in
-            if case .success(let shows, _, _) = result {
-                XCTAssertEqual(shows.count, 2)
-                expectation.fulfill()
+        traktManager
+            .getUpdatedShows(startDate: try! Date.dateFromString("2014-09-22"), pagination: Pagination(page: 1, limit: 10)) { result in
+                if case let .success(shows, _, _) = result {
+                    XCTAssertEqual(shows.count, 2)
+                    expectation.fulfill()
+                }
             }
-        }
         let result = XCTWaiter().wait(for: [expectation], timeout: 5)
         XCTAssertEqual(session.lastURL?.path, "/shows/updates/2014-09-22")
         XCTAssertTrue(session.lastURL?.query?.contains("extended=min") ?? false)
@@ -246,7 +247,7 @@ class ShowsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "ShowSummary")
         traktManager.getShowSummary(showID: "game-of-thrones") { result in
-            if case .success(let show) = result {
+            if case let .success(show) = result {
                 XCTAssertEqual(show.title, "Game of Thrones")
                 XCTAssertEqual(show.year, 2011)
                 XCTAssertEqual(show.ids.trakt, 353)
@@ -289,7 +290,7 @@ class ShowsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "ShowSummary")
         traktManager.getShowSummary(showID: "game-of-thrones", extended: [.Full]) { result in
-            if case .success(let show) = result {
+            if case let .success(show) = result {
                 XCTAssertEqual(show.title, "Game of Thrones")
                 XCTAssertEqual(show.year, 2011)
                 XCTAssertEqual(show.ids.trakt, 353)
@@ -326,14 +327,14 @@ class ShowsTests: XCTestCase {
             break
         }
     }
-    
+
     func test_get_full_show_await() async throws {
         session.nextData = jsonData(named: "Show_Full")
-        
+
         let show = try await traktManager.show(id: "game-of-thrones").summary()
             .extend(.Full)
             .perform()
-        
+
         XCTAssertEqual(show.title, "Game of Thrones")
         XCTAssertEqual(show.year, 2011)
         XCTAssertEqual(show.ids.trakt, 353)
@@ -364,7 +365,7 @@ class ShowsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "ShowAliases")
         traktManager.getShowAliases(showID: "game-of-thrones") { result in
-            if case .success(let aliases) = result {
+            if case let .success(aliases) = result {
                 XCTAssertEqual(aliases.count, 32)
                 expectation.fulfill()
             }
@@ -397,7 +398,7 @@ class ShowsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get show translations")
         traktManager.getShowTranslations(showID: "game-of-thrones", language: "es") { result in
-            if case .success(let translations) = result {
+            if case let .success(translations) = result {
                 XCTAssertEqual(translations.count, 3)
                 expectation.fulfill()
             }
@@ -422,7 +423,7 @@ class ShowsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get show comments")
         traktManager.getShowComments(showID: "game-of-thrones") { result in
-            if case .success(let comments, _, _) = result {
+            if case let .success(comments, _, _) = result {
                 XCTAssertEqual(comments.count, 1)
                 expectation.fulfill()
             }
@@ -445,7 +446,7 @@ class ShowsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get lists containing shows")
         traktManager.getListsContainingShow(showID: "game-of-thrones") { result in
-            if case .success(let lists) = result {
+            if case let .success(lists) = result {
                 XCTAssertEqual(lists.count, 1)
                 expectation.fulfill()
             }
@@ -468,7 +469,7 @@ class ShowsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get collected progress")
         traktManager.getShowCollectionProgress(showID: "game-of-thrones") { result in
-            if case .success(let collectionProgress) = result {
+            if case let .success(collectionProgress) = result {
                 XCTAssertEqual(collectionProgress.aired, 8)
                 XCTAssertEqual(collectionProgress.completed, 6)
                 XCTAssertEqual(collectionProgress.seasons.count, 1)
@@ -499,7 +500,7 @@ class ShowsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get watched progress")
         traktManager.getShowWatchedProgress(showID: "game-of-thrones") { result in
-            if case .success(let progress) = result {
+            if case let .success(progress) = result {
                 XCTAssertEqual(progress.completed, 6)
                 XCTAssertEqual(progress.aired, 8)
                 expectation.fulfill()
@@ -524,13 +525,15 @@ class ShowsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "ShowCastAndCrew")
         traktManager.getPeopleInShow(showID: "game-of-thrones") { result in
-            if case .success(let castAndCrew) = result {
+            if case let .success(castAndCrew) = result {
                 XCTAssertNotNil(castAndCrew.cast)
                 XCTAssertNotNil(castAndCrew.producers)
                 XCTAssertEqual(castAndCrew.cast!.count, 43)
                 XCTAssertEqual(castAndCrew.producers!.count, 24)
-                
-                guard let actor = castAndCrew.cast?.first else { XCTFail("Cast is empty"); return }
+
+                guard let actor = castAndCrew.cast?.first else { XCTFail("Cast is empty")
+                    return
+                }
                 XCTAssertEqual(actor.person.name, "Emilia Clarke")
                 XCTAssertEqual(actor.characters, ["Daenerys Targaryen"])
             }
@@ -546,13 +549,13 @@ class ShowsTests: XCTestCase {
             break
         }
     }
-    
+
     func test_get_show_people_full() {
         session.nextData = jsonData(named: "ShowCastAndCrew_Full")
-        
+
         let expectation = XCTestExpectation(description: "ShowCastAndCrew")
         traktManager.getPeopleInShow(showID: "game-of-thrones", extended: [.Full]) { result in
-            if case .success(let castAndCrew) = result {
+            if case let .success(castAndCrew) = result {
                 XCTAssertNotNil(castAndCrew.cast)
                 XCTAssertNotNil(castAndCrew.producers)
                 XCTAssertEqual(castAndCrew.cast!.count, 43)
@@ -562,7 +565,7 @@ class ShowsTests: XCTestCase {
         }
         let result = XCTWaiter().wait(for: [expectation], timeout: 5)
         XCTAssertEqual(session.lastURL?.absoluteString, "https://api.trakt.tv/shows/game-of-thrones/people?extended=full")
-        
+
         switch result {
         case .timedOut:
             XCTFail("Something isn't working")
@@ -570,13 +573,13 @@ class ShowsTests: XCTestCase {
             break
         }
     }
-    
+
     func test_get_show_people_guest_stars() {
         session.nextData = jsonData(named: "ShowCastAndCrew_GuestStars")
-        
+
         let expectation = XCTestExpectation(description: "ShowCastAndCrew")
         traktManager.getPeopleInShow(showID: "game-of-thrones", extended: [.guestStars]) { result in
-            if case .success(let castAndCrew) = result {
+            if case let .success(castAndCrew) = result {
                 XCTAssertNotNil(castAndCrew.cast)
                 XCTAssertNotNil(castAndCrew.guestStars)
                 XCTAssertNotNil(castAndCrew.producers)
@@ -588,7 +591,7 @@ class ShowsTests: XCTestCase {
         }
         let result = XCTWaiter().wait(for: [expectation], timeout: 5)
         XCTAssertEqual(session.lastURL?.absoluteString, "https://api.trakt.tv/shows/game-of-thrones/people?extended=guest_stars")
-        
+
         switch result {
         case .timedOut:
             XCTFail("Something isn't working")
@@ -604,7 +607,7 @@ class ShowsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get show ratings")
         traktManager.getShowRatings(showID: "game-of-thrones") { result in
-            if case .success(let ratings) = result {
+            if case let .success(ratings) = result {
                 XCTAssertEqual(ratings.rating, 9.38363)
                 XCTAssertEqual(ratings.votes, 51065)
                 expectation.fulfill()
@@ -628,7 +631,7 @@ class ShowsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get related shows")
         traktManager.getRelatedShows(showID: "game-of-thrones") { result in
-            if case .success(let relatedShows) = result {
+            if case let .success(relatedShows) = result {
                 XCTAssertEqual(relatedShows.count, 10)
                 expectation.fulfill()
             }
@@ -651,13 +654,13 @@ class ShowsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Stats")
         traktManager.getShowStatistics(showID: "game-of-thrones") { result in
-            if case .success(let stats) = result {
+            if case let .success(stats) = result {
                 XCTAssertEqual(stats.comments, 298)
-                XCTAssertEqual(stats.lists, 221719)
+                XCTAssertEqual(stats.lists, 221_719)
                 XCTAssertEqual(stats.votes, 72920)
-                XCTAssertEqual(stats.collectors, 710781)
-                XCTAssertEqual(stats.collectedEpisodes, 36532224)
-                XCTAssertEqual(stats.watchers, 610988)
+                XCTAssertEqual(stats.collectors, 710_781)
+                XCTAssertEqual(stats.collectedEpisodes, 36_532_224)
+                XCTAssertEqual(stats.watchers, 610_988)
                 expectation.fulfill()
             }
         }
@@ -679,7 +682,7 @@ class ShowsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Get users watching the show")
         traktManager.getUsersWatchingShow(showID: "game-of-thrones") { result in
-            if case .success(let users) = result {
+            if case let .success(users) = result {
                 XCTAssertEqual(users.count, 2)
                 expectation.fulfill()
             }
@@ -703,7 +706,7 @@ class ShowsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "NextEpisode")
         traktManager.getNextEpisode(showID: "game-of-thrones") { result in
-            if case .error(let error) = result {
+            if case let .error(error) = result {
                 XCTAssertNotNil(error)
                 XCTAssertEqual(error!._code, 204)
                 expectation.fulfill()
@@ -727,7 +730,7 @@ class ShowsTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "LastEpisode")
         traktManager.getLastEpisode(showID: "game-of-thrones") { result in
-            if case .success(let episode) = result {
+            if case let .success(episode) = result {
                 XCTAssertEqual(episode.title, "The Dragon and the Wolf")
                 XCTAssertEqual(episode.season, 7)
                 XCTAssertEqual(episode.number, 7)
@@ -744,5 +747,4 @@ class ShowsTests: XCTestCase {
             break
         }
     }
-
 }
