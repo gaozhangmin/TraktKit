@@ -23,6 +23,7 @@ public class TraktManager {
     private enum Constants {
         static let tokenExpirationDefaultsKey = "accessTokenExpirationDate"
         static let oneMonth: TimeInterval = 2_629_800
+        static let tenMins: TimeInterval = 36000
     }
 
     // MARK: Internal
@@ -525,11 +526,11 @@ public class TraktManager {
         guard let expiredDate = UserDefaults.standard.object(forKey: Constants.tokenExpirationDefaultsKey) as? Date else {
             return .noTokens
         }
-        let refreshDate = expiredDate.addingTimeInterval(-Constants.oneMonth)
+        let refreshDate = expiredDate.addingTimeInterval(-Constants.tenMins)
         let now = Date()
 
         if now >= expiredDate {
-            return .expiredTokens
+            return .refreshTokens
         }
 
         if now >= refreshDate {
