@@ -425,13 +425,14 @@ public class TraktManager {
                     continue
                 }
                 self.send(request: request, count: i) { result in
-                    completionHandler?(result)
                     switch result {
                     case .success:
                         self.isWaitingToToken = false
+                        completionHandler?(result)
                     case let .fail(progress):
                         if progress == 0 {
                             self.isWaitingToToken = false
+                            completionHandler?(result)
                         }
                     }
                 }
